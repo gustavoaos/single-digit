@@ -52,6 +52,18 @@ class SingleDigitTest {
     }
 
     @Test
+    @DisplayName("Should throws an Invalid Parameter Exception when K is zero")
+    void shouldThrowsInvalidParameterExceptionWhenKIsZero() {
+        n = "1";
+        k = "0";
+
+        assertThatThrownBy(() -> new SingleDigit(n, k))
+                .isInstanceOf(InvalidParameterException.class)
+                .hasMessage("K should be greater or equals to 1");
+
+    }
+
+    @Test
     @DisplayName("Should throws an Invalid Parameter Exception when N is invalid string")
     void shouldThrowsNumberFormatExceptionWhenNIsInvalidString() {
         n = "invalid_value";
