@@ -23,7 +23,7 @@ class SingleDigitTest {
 
         assertThatThrownBy(() -> new SingleDigit(n, k))
                 .isInstanceOf(InvalidParameterException.class)
-                .hasMessage("N should be greater than 1");
+                .hasMessage("N should be greater or equals to 1");
 
     }
 
@@ -35,7 +35,7 @@ class SingleDigitTest {
 
         assertThatThrownBy(() -> new SingleDigit(n, k))
                 .isInstanceOf(InvalidParameterException.class)
-                .hasMessage("K should be greater than 1");
+                .hasMessage("K should be greater or equals to 1");
 
     }
 
@@ -47,7 +47,7 @@ class SingleDigitTest {
 
         assertThatThrownBy(() -> new SingleDigit(n, k))
                 .isInstanceOf(InvalidParameterException.class)
-                .hasMessage("N should be greater than 1");
+                .hasMessage("N should be greater or equals to 1");
 
     }
 

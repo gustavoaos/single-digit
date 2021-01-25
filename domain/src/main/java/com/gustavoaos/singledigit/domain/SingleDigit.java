@@ -15,10 +15,10 @@ public class SingleDigit {
 
     public SingleDigit(String n, String k) {
         if (isLowerThanMinimumValue(n)) {
-            throw new InvalidParameterException("N should be greater than 1");
+            throw new InvalidParameterException("N should be greater or equals to 1");
         }
         if (isLowerThanMinimumValue(k)) {
-            throw new InvalidParameterException("K should be greater than 1");
+            throw new InvalidParameterException("K should be greater or equals to 1");
         }
 
         this.n = n;
