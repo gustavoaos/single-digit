@@ -73,4 +73,15 @@ class SingleDigitTest {
                 .isInstanceOf(NumberFormatException.class);
 
     }
+
+    @Test
+    @DisplayName("Should throws an Invalid Parameter Exception when K is invalid string")
+    void shouldThrowsNumberFormatExceptionWhenKIsInvalidString() {
+        n = "1";
+        k = "invalid_value";
+
+        assertThatThrownBy(() -> new SingleDigit(n, k))
+                .isInstanceOf(NumberFormatException.class);
+
+    }
 }
