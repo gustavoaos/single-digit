@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigInteger;
 import java.security.InvalidParameterException;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -83,5 +84,16 @@ class SingleDigitTest {
         assertThatThrownBy(() -> new SingleDigit(n, k))
                 .isInstanceOf(NumberFormatException.class);
 
+    }
+
+    @Test
+    @DisplayName("Should throws invalid parameter exception if n is greater than maximum value")
+    void shouldThrowsInvalidParametersExceptionIfNIsGreaterThanMaximumValue() {
+        BigInteger max = BigInteger.valueOf(10).pow(10^1000000);
+        String n = max.add(BigInteger.ONE).toString();
+        k = "1";
+
+        assertThatThrownBy(() -> new SingleDigit(n, k))
+                .isInstanceOf(InvalidParameterException.class);
     }
 }
