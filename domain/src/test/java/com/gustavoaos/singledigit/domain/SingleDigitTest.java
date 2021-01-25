@@ -26,4 +26,16 @@ class SingleDigitTest {
                 .hasMessage("N should be greater than 1");
 
     }
+
+    @Test
+    @DisplayName("Should throws an Invalid Parameter Exception when N is zero")
+    void shouldThrowsInvalidParameterExceptionWhenNIsZero() {
+        n = "0";
+        k = "valid_value";
+
+        assertThatThrownBy(() -> new SingleDigit(n, k))
+                .isInstanceOf(InvalidParameterException.class)
+                .hasMessage("N should be greater than 1");
+
+    }
 }
