@@ -38,4 +38,15 @@ class SingleDigitTest {
                 .hasMessage("N should be greater than 1");
 
     }
+
+    @Test
+    @DisplayName("Should throws an Invalid Parameter Exception when N is invalid string")
+    void shouldThrowsNumberFormatExceptionWhenNIsInvalidString() {
+        n = "invalid_value";
+        k = "valid_value";
+
+        assertThatThrownBy(() -> new SingleDigit(n, k))
+                .isInstanceOf(NumberFormatException.class);
+
+    }
 }
