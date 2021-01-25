@@ -10,6 +10,7 @@ import java.math.BigInteger;
 import java.security.InvalidParameterException;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class SingleDigitTest {
@@ -108,5 +109,50 @@ class SingleDigitTest {
 
         assertThatThrownBy(() -> new SingleDigit(n, k))
                 .isInstanceOf(InvalidParameterException.class);
+    }
+
+    @Test
+    @DisplayName("Should returns n when n is lower than 10 and K is equals to 1")
+    void shouldReturnsNWhenNIsLowerThanTenAndKIsEqualsToOne() {
+        SingleDigit stu = new SingleDigit("7", "1");
+        int expected = 7;
+
+        assertThat(stu.calculate()).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("Should calculates single digit when n is greater than 10 and K is equals to 1")
+    void shouldCalculatesSingleDigitWhenNIsGreaterThanTen() {
+        SingleDigit stu = new SingleDigit("16", "1");
+        int expected = 7;
+
+        assertThat(stu.calculate()).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("Should calculates single digit when n and k are greater than 10")
+    void shouldCalculatesSingleDigitWhenNAndKAreGreaterThanTen() {
+        SingleDigit stu = new SingleDigit("9875", "4");
+        int expected = 8;
+
+        assertThat(stu.calculate()).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("Should calculates single digit when mod times k is greater than 10")
+    void shouldCalculatesSingleDigitWhenModTimesKIsGreaterThanTen() {
+        SingleDigit stu = new SingleDigit("9881", "4");
+        int expected = 8;
+
+        assertThat(stu.calculate()).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("Should calculates single digit when mod is equals to 9")
+    void shouldCalculatesSingleDigitWhenModIsEqualsToNine() {
+        SingleDigit stu = new SingleDigit("9", "1");
+        int expected = 9;
+
+        assertThat(stu.calculate()).isEqualTo(expected);
     }
 }

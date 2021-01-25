@@ -41,4 +41,23 @@ public class SingleDigit {
         this.n = n;
         this.k = k;
     }
+
+    public int calculate() {
+        BigInteger n = new BigInteger(this.n);
+        BigInteger k = new BigInteger(this.k);
+
+        return singleDigitSum(n, k);
+    }
+
+    private int singleDigitSum(BigInteger n, BigInteger k) {
+        BigInteger bigNine = BigInteger.valueOf(9);
+        BigInteger mod = n.mod(bigNine).compareTo(BigInteger.ZERO) == 0 ? bigNine : n.mod(bigNine);
+        BigInteger sum = mod.multiply(k);
+
+        if (sum.compareTo(BigInteger.TEN) > 0) {
+            return singleDigitSum(sum, k);
+        }
+
+        return sum.intValue();
+    }
 }
