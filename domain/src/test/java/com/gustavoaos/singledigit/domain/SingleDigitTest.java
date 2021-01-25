@@ -19,7 +19,7 @@ class SingleDigitTest {
     @DisplayName("Should throws an Invalid Parameter Exception when N is negative")
     void shouldThrowsInvalidParameterExceptionWhenNIsNegative() {
         n = "-1";
-        k = "valid_value";
+        k = "1";
 
         assertThatThrownBy(() -> new SingleDigit(n, k))
                 .isInstanceOf(InvalidParameterException.class)
@@ -28,10 +28,22 @@ class SingleDigitTest {
     }
 
     @Test
+    @DisplayName("Should throws an Invalid Parameter Exception when K is negative")
+    void shouldThrowsInvalidParameterExceptionWhenKIsNegative() {
+        n = "1";
+        k = "-1";
+
+        assertThatThrownBy(() -> new SingleDigit(n, k))
+                .isInstanceOf(InvalidParameterException.class)
+                .hasMessage("K should be greater than 1");
+
+    }
+
+    @Test
     @DisplayName("Should throws an Invalid Parameter Exception when N is zero")
     void shouldThrowsInvalidParameterExceptionWhenNIsZero() {
         n = "0";
-        k = "valid_value";
+        k = "1";
 
         assertThatThrownBy(() -> new SingleDigit(n, k))
                 .isInstanceOf(InvalidParameterException.class)
@@ -43,7 +55,7 @@ class SingleDigitTest {
     @DisplayName("Should throws an Invalid Parameter Exception when N is invalid string")
     void shouldThrowsNumberFormatExceptionWhenNIsInvalidString() {
         n = "invalid_value";
-        k = "valid_value";
+        k = "1";
 
         assertThatThrownBy(() -> new SingleDigit(n, k))
                 .isInstanceOf(NumberFormatException.class);

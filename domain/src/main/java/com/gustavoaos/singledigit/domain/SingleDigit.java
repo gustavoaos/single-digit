@@ -11,6 +11,9 @@ public class SingleDigit {
         if (Integer.parseInt(n) < 1) {
             throw new InvalidParameterException("N should be greater than 1");
         }
+        if (Integer.parseInt(k) < 1) {
+            throw new InvalidParameterException("K should be greater than 1");
+        }
 
         this.n = n;
         this.k = k;
