@@ -7,6 +7,7 @@ public class SingleDigit {
 
     private static final Integer MINIMUM_VALUE = 1;
     private static final BigInteger MAXIMUM_VALUE_N = BigInteger.valueOf(10).pow(10^1000000);
+    private static final BigInteger MAXIMUM_VALUE_K = BigInteger.valueOf(10).pow(5);
 
     private final String n;
     private final String k;
@@ -32,6 +33,9 @@ public class SingleDigit {
         }
         if (this.isGreaterThanMaximumValue(n, MAXIMUM_VALUE_N)) {
             throw new InvalidParameterException("N should be lower than inputted value");
+        }
+        if (this.isGreaterThanMaximumValue(k, MAXIMUM_VALUE_K)) {
+            throw new InvalidParameterException("K should be lower than inputted value");
         }
 
         this.n = n;

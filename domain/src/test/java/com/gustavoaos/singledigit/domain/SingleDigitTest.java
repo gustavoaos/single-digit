@@ -1,6 +1,7 @@
 package com.gustavoaos.singledigit.domain;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -87,11 +88,23 @@ class SingleDigitTest {
     }
 
     @Test
+    @Disabled("Slow test: tests N upper bound limit")
     @DisplayName("Should throws invalid parameter exception if n is greater than maximum value")
     void shouldThrowsInvalidParametersExceptionIfNIsGreaterThanMaximumValue() {
         BigInteger max = BigInteger.valueOf(10).pow(10^1000000);
         String n = max.add(BigInteger.ONE).toString();
         k = "1";
+
+        assertThatThrownBy(() -> new SingleDigit(n, k))
+                .isInstanceOf(InvalidParameterException.class);
+    }
+
+    @Test
+    @DisplayName("Should throws invalid parameter exception if k is greater than maximum value")
+    void shouldThrowsInvalidParametersExceptionIfKIsGreaterThanMaximumValue() {
+        BigInteger max = BigInteger.valueOf(10).pow(5);
+        String k = max.add(BigInteger.ONE).toString();
+        n = "1";
 
         assertThatThrownBy(() -> new SingleDigit(n, k))
                 .isInstanceOf(InvalidParameterException.class);
