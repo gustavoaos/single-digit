@@ -43,10 +43,10 @@ public class SingleDigit {
     }
 
     public int calculate() {
-        BigInteger n = new BigInteger(this.n);
-        BigInteger k = new BigInteger(this.k);
+        BigInteger bigN = new BigInteger(this.n);
+        BigInteger bigK = new BigInteger(this.k);
 
-        return singleDigitSum(n, k);
+        return singleDigitSum(bigN, bigK);
     }
 
     private int singleDigitSum(BigInteger n, BigInteger k) {
