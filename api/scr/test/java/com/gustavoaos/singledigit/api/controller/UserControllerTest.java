@@ -42,6 +42,20 @@ class UserControllerTest {
     }
 
     @Test
+    @Description("Should return 400 if user with no email is provided")
+    void shouldReturn400IfInvalidUserIsProvided() throws Exception {
+        CreateUserRequest userRequest = CreateUserRequest
+                .builder()
+                .name("Valid Name")
+                .build();
+
+        mockMvc.perform(post("/users")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(userRequest)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     @Description("Should return 201 status and created user if valid user is provided")
     void shouldReturn201IfValidUserIsProvided() throws Exception {
         CreateUserRequest userRequest = CreateUserRequest
