@@ -77,7 +77,7 @@ class UserControllerTest {
                 .name("Valid Name")
                 .email("valid@mail.com")
                 .build();
-        UUID mockUserUUID = UUID.randomUUID();
+        String mockUserUUID = UUID.randomUUID().toString();
         UserResponse mockUser = UserResponse
                 .builder()
                 .id(mockUserUUID)

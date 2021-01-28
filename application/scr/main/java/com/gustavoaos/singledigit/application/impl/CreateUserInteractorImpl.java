@@ -22,7 +22,6 @@ public class CreateUserInteractorImpl implements CreateUserInteractor {
     @Override
     public UserResponse execute(CreateUserRequest request) {
         User user = request.toDomain();
-        return null;
-        // return UserResponse.from(this.userRepository.create(user));
+        return UserResponse.from(this.userRepository.create(user));
     }
 }
