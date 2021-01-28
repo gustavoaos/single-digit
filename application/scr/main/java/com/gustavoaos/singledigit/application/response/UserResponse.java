@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.security.InvalidParameterException;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -15,6 +17,10 @@ public class UserResponse {
     private String email;
 
     public static UserResponse from(User user) {
+        if (user == null || user.getUuid() == null || user.getName().isEmpty() || user.getEmail().isEmpty()) {
+            throw new InvalidParameterException("Invalid user provided");
+        }
+
         return UserResponse.builder()
                 .id(user.getUuid().toString())
                 .name(user.getName())

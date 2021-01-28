@@ -6,9 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Description;
 
+import java.security.InvalidParameterException;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @SpringBootTest
 class UserResponseTest {
@@ -27,6 +29,14 @@ class UserResponseTest {
 
         domainUser = User
                 .builder().uuid(uuid).name(name).email(email).build();
+    }
+
+    @Test
+    @Description("Should throw an InvalidParameterException when user provided is null")
+    void shouldThrowAnInvalidParametersExceptionWhenUserProvidedIsNull() {
+        assertThatThrownBy(() -> UserResponse.from(null))
+                .isInstanceOf(InvalidParameterException.class)
+                .hasMessage("Invalid user provided");
     }
 
     @Test
