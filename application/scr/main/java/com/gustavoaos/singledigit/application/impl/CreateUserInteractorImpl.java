@@ -3,15 +3,26 @@ package com.gustavoaos.singledigit.application.impl;
 import com.gustavoaos.singledigit.application.CreateUserInteractor;
 import com.gustavoaos.singledigit.application.request.CreateUserRequest;
 import com.gustavoaos.singledigit.application.response.UserResponse;
+import com.gustavoaos.singledigit.domain.User;
+import com.gustavoaos.singledigit.domain.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
 
 @Component
 public class CreateUserInteractorImpl implements CreateUserInteractor {
 
+    private UserRepository userRepository;
+
+    @Autowired
+    public CreateUserInteractorImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @Override
     public UserResponse execute(CreateUserRequest request) {
+        User user = request.toDomain();
         return null;
+        // return UserResponse.from(this.userRepository.create(user));
     }
 }
