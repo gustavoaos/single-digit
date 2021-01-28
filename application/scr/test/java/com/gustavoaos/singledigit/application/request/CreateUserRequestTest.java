@@ -6,12 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Description;
 
-import static org.assertj.core.api.AssertionsForClassTypes.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
 class CreateUserRequestTest {
 
-    CreateUserRequest createUserRequest;
+    CreateUserRequest sut;
     User domainUser;
 
     @BeforeEach
@@ -19,7 +19,7 @@ class CreateUserRequestTest {
         String name = "Joe Doe";
         String email = "joe@doe.com";
 
-        createUserRequest = CreateUserRequest
+        sut = CreateUserRequest
                 .builder().name(name).email(email).build();
 
         domainUser = User.builder()
@@ -29,7 +29,9 @@ class CreateUserRequestTest {
     @Test
     @Description("Should return an User when is pass a CreateUserRequest")
     void shouldMapCreateUserRequestToUserDomain() {
-        assertThat(createUserRequest.toDomain()).isEqualTo(domainUser);
+        assertThat(sut.toDomain().getUuid()).isNotNull();
+        assertThat(sut.toDomain().getName()).isEqualTo(domainUser.getName());
+        assertThat(sut.toDomain().getEmail()).isEqualTo(domainUser.getEmail());
     }
 
 }

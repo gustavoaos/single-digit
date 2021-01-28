@@ -8,11 +8,10 @@ import com.gustavoaos.singledigit.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
 @Component
 public class CreateUserInteractorImpl implements CreateUserInteractor {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public CreateUserInteractorImpl(UserRepository userRepository) {
@@ -22,6 +21,7 @@ public class CreateUserInteractorImpl implements CreateUserInteractor {
     @Override
     public UserResponse execute(CreateUserRequest request) {
         User user = request.toDomain();
-        return UserResponse.from(this.userRepository.create(user));
+        User domainUser = this.userRepository.create(user);
+        return UserResponse.from(domainUser);
     }
 }

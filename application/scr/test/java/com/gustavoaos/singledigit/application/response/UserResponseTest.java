@@ -1,6 +1,5 @@
 package com.gustavoaos.singledigit.application.response;
 
-import com.gustavoaos.singledigit.application.request.CreateUserRequest;
 import com.gustavoaos.singledigit.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,9 +11,9 @@ import java.util.UUID;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
-public class UserResponseTest {
+class UserResponseTest {
 
-    UserResponse userResponse;
+    UserResponse sut;
     User domainUser;
 
     @BeforeEach
@@ -23,7 +22,7 @@ public class UserResponseTest {
         String email = "joe@doe.com";
         UUID uuid = UUID.randomUUID();
 
-        userResponse = UserResponse
+        sut = UserResponse
                 .builder().id(uuid.toString()).name(name).email(email).build();
 
         domainUser = User
@@ -33,6 +32,6 @@ public class UserResponseTest {
     @Test
     @Description("Should return an User when is pass a CreateUserRequest")
     void shouldMapCreateUserRequestToUserDomain() {
-        assertThat(UserResponse.from(domainUser)).isEqualTo(userResponse);
+        assertThat(UserResponse.from(domainUser)).isEqualTo(sut);
     }
 }
