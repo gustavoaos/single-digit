@@ -20,10 +20,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.*;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -49,7 +49,7 @@ class UserControllerTest {
     private UserResponse mockUser;
 
     @BeforeEach
-    void setUp() {
+    void initEach() {
         mockUserUUID = UUID.randomUUID().toString();
         mockUser = UserResponse
                 .builder()
@@ -153,7 +153,8 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.singleDigits", hasSize(2)));
     }
 
-    @Test@Description("Should return 404 http status when user not found")
+    @Test
+    @Description("Should return 404 http status when user not found")
     void shouldReturn404WhenUserNotFound() throws Exception {
         Mockito.when(findUserInteractor.execute(mockUserUUID))
                 .thenThrow(new NotFoundException("resource", mockUserUUID));
@@ -163,5 +164,16 @@ class UserControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isNotFound())
                 .andExpect(status().reason("Resource not found"));
+    }
+
+    @Test
+    @Description("Should return 204 http status when delete existing user")
+    void shouldReturn204WhenDeleteExistingUser() throws Exception {
+        Mockito.when(findUserInteractor.execute(mockUserUUID)).thenReturn(mockUser);
+        Mockito.doNothing().when(deleteUserInteractor).execute(mockUserUUID);
+
+        mockMvc.perform(delete("/users/" + mockUserUUID)
+                .contentType("application/json"))
+                .andExpect(status().isNoContent());
     }
 }
