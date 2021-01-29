@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -23,4 +25,7 @@ public class User {
     private UUID uuid;
     private String name;
     private String email;
+
+    @ElementCollection
+    private List<SingleDigit> singleDigits = new ArrayList<>();
 }
