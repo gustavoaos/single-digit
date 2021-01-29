@@ -1,6 +1,7 @@
 package com.gustavoaos.singledigit.api.controller;
 
 import com.gustavoaos.singledigit.application.CreateUserInteractor;
+import com.gustavoaos.singledigit.application.FindUserInteractor;
 import com.gustavoaos.singledigit.application.request.CreateUserRequest;
 import com.gustavoaos.singledigit.application.response.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,15 @@ import org.springframework.web.server.ResponseStatusException;
 public class UserController {
 
     private final CreateUserInteractor createUserInteractor;
+    private final FindUserInteractor findUserInteractor;
 
     @Autowired
-    public UserController(CreateUserInteractor createUserInteractor) {
+    public UserController(
+            CreateUserInteractor createUserInteractor,
+            FindUserInteractor findUserInteractor
+    ) {
         this.createUserInteractor = createUserInteractor;
+        this.findUserInteractor = findUserInteractor;
     }
 
     @PostMapping
@@ -29,6 +35,13 @@ public class UserController {
 
         UserResponse user = this.createUserInteractor.execute(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody ResponseEntity<UserResponse> find(@PathVariable("id") String id) {
+        UserResponse user = this.findUserInteractor.execute(id);
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
 }
