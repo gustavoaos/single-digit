@@ -1,16 +1,22 @@
 package com.gustavoaos.singledigit.domain;
 
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Embeddable;
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.InvalidParameterException;
 
-public class SingleDigit {
+@Embeddable
+@NoArgsConstructor
+public class SingleDigit implements Serializable {
 
     private static final Integer MINIMUM_VALUE = 1;
     private static final BigInteger MAXIMUM_VALUE_N = BigInteger.valueOf(10).pow(10^1000000);
     private static final BigInteger MAXIMUM_VALUE_K = BigInteger.valueOf(10).pow(5);
 
-    private final String n;
-    private final String k;
+    private String n;
+    private String k;
 
     private boolean isLowerThanMinimumValue(String s) {
         BigInteger value = new BigInteger(s);
