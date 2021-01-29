@@ -5,6 +5,7 @@ import com.gustavoaos.singledigit.application.CreateUserInteractor;
 import com.gustavoaos.singledigit.application.FindUserInteractor;
 import com.gustavoaos.singledigit.application.request.CreateUserRequest;
 import com.gustavoaos.singledigit.application.response.UserResponse;
+import com.gustavoaos.singledigit.domain.SingleDigit;
 import com.gustavoaos.singledigit.domain.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,9 +17,10 @@ import org.springframework.context.annotation.Description;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-import java.util.UUID;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -50,6 +52,7 @@ class UserControllerTest {
                 .id(mockUserUUID)
                 .name("Valid Name")
                 .email("valid@mail.com")
+                .singleDigits(Collections.emptyList())
                 .build();
     }
 
@@ -108,7 +111,8 @@ class UserControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", is(mockUser.getId().toString())))
                 .andExpect(jsonPath("$.name", is(mockUser.getName())))
-                .andExpect(jsonPath("$.email", is(mockUser.getEmail())));
+                .andExpect(jsonPath("$.email", is(mockUser.getEmail())))
+                .andExpect(jsonPath("$.singleDigits", hasSize(0)));
     }
 
     @Test
@@ -122,7 +126,8 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(mockUser.getId().toString())))
                 .andExpect(jsonPath("$.name", is(mockUser.getName())))
-                .andExpect(jsonPath("$.email", is(mockUser.getEmail())));
+                .andExpect(jsonPath("$.email", is(mockUser.getEmail())))
+                .andExpect(jsonPath("$.singleDigits", hasSize(0)));
     }
 
     @Test@Description("Should return 404 http status when user not found")

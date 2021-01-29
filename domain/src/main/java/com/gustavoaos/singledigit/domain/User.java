@@ -23,9 +23,11 @@ public class User {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID uuid;
+
     private String name;
     private String email;
 
+    @Builder.Default
     @ElementCollection
     private List<SingleDigit> singleDigits = new ArrayList<>();
 }
