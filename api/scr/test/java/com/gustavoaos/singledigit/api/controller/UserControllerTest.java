@@ -130,6 +130,25 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.singleDigits", hasSize(0)));
     }
 
+    @Test
+    @Description("Should return 200 http status and user with single digits previous calculated when valid id is provided")
+    void shouldReturn200AndUserWithSingleDigitsPreviousCalculatedWhenValidIdIsProvided() throws Exception {
+        List<SingleDigit> sd = Arrays.asList(
+                new SingleDigit("1", "1"),
+                new SingleDigit("7894", "4"));
+        mockUser.setSingleDigits(sd);
+        Mockito.when(findUserInteractor.execute(mockUserUUID)).thenReturn(mockUser);
+
+        mockMvc.perform(get("/users/" + mockUserUUID)
+                .contentType("application/json"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(mockUser.getId().toString())))
+                .andExpect(jsonPath("$.name", is(mockUser.getName())))
+                .andExpect(jsonPath("$.email", is(mockUser.getEmail())))
+                .andExpect(jsonPath("$.singleDigits", hasSize(2)));
+    }
+
     @Test@Description("Should return 404 http status when user not found")
     void shouldReturn404WhenUserNotFound() throws Exception {
         Mockito.when(findUserInteractor.execute(mockUserUUID))
