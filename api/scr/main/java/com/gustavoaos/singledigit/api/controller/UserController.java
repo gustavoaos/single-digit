@@ -3,7 +3,9 @@ package com.gustavoaos.singledigit.api.controller;
 import com.gustavoaos.singledigit.application.CreateUserInteractor;
 import com.gustavoaos.singledigit.application.DeleteUserInteractor;
 import com.gustavoaos.singledigit.application.FindUserInteractor;
+import com.gustavoaos.singledigit.application.UpdateUserInteractor;
 import com.gustavoaos.singledigit.application.request.CreateUserRequest;
+import com.gustavoaos.singledigit.application.request.UpdateUserRequest;
 import com.gustavoaos.singledigit.application.response.UserResponse;
 import com.gustavoaos.singledigit.domain.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +21,19 @@ public class UserController {
     private final CreateUserInteractor createUserInteractor;
     private final FindUserInteractor findUserInteractor;
     private final DeleteUserInteractor deleteUserInteractor;
+    private final UpdateUserInteractor updateUserInteractor;
 
     @Autowired
     public UserController(
             CreateUserInteractor createUserInteractor,
             FindUserInteractor findUserInteractor,
-            DeleteUserInteractor deleteUserInteractor
+            DeleteUserInteractor deleteUserInteractor,
+            UpdateUserInteractor updateUserInteractor
     ) {
         this.createUserInteractor = createUserInteractor;
         this.findUserInteractor = findUserInteractor;
         this.deleteUserInteractor = deleteUserInteractor;
+        this.updateUserInteractor = updateUserInteractor;
     }
 
     @PostMapping
@@ -61,6 +66,15 @@ public class UserController {
         } catch (NotFoundException err) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, err.getMessage());
         }
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody ResponseEntity<UserResponse> update(
+            @PathVariable("id") String id,
+            @RequestBody UpdateUserRequest request) {
+        UserResponse user = this.updateUserInteractor.execute(id, request);
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
 }
