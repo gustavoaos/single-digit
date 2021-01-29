@@ -115,7 +115,7 @@ class UserControllerTest {
     @Test
     @Description("Should return 200 http status and user when valid id is provided")
     void shouldReturn200AndUserWhenValidIdIsProvided() throws Exception {
-        Mockito.when(findUserInteractor.execute(Mockito.anyString())).thenReturn(mockUser);
+        Mockito.when(findUserInteractor.execute(mockUserUUID.toString())).thenReturn(mockUser);
 
         MvcResult result = mockMvc.perform(get("/users/" + mockUserUUID.toString())
                 .contentType("application/json"))
@@ -123,4 +123,5 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
     }
+
 }
