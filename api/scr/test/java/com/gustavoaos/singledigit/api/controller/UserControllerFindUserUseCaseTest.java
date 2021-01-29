@@ -6,7 +6,6 @@ import com.gustavoaos.singledigit.application.DeleteUserInteractor;
 import com.gustavoaos.singledigit.application.FindUserInteractor;
 import com.gustavoaos.singledigit.application.UpdateUserInteractor;
 import com.gustavoaos.singledigit.application.request.CreateUserRequest;
-import com.gustavoaos.singledigit.application.request.UpdateUserRequest;
 import com.gustavoaos.singledigit.application.response.UserResponse;
 import com.gustavoaos.singledigit.domain.SingleDigit;
 import com.gustavoaos.singledigit.domain.exception.NotFoundException;
@@ -20,7 +19,10 @@ import org.springframework.context.annotation.Description;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -31,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = UserController.class)
-class UserControllerTest {
+class UserControllerFindUserUseCaseTest {
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -64,65 +66,6 @@ class UserControllerTest {
                 .email("valid@mail.com")
                 .singleDigits(Collections.emptyList())
                 .build();
-    }
-
-    @Test
-    @Description("Should return 400 if no user is provided")
-    void shouldReturn400IfNoUserIsProvided() throws Exception {
-        mockMvc.perform(post("/users")
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(null)))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    @Description("Should return 400 if user with no email is provided")
-    void shouldReturn400IfUserWithNoEmailIsProvided() throws Exception {
-        CreateUserRequest userRequest = CreateUserRequest
-                .builder()
-                .name("Valid Name")
-                .build();
-
-        mockMvc.perform(post("/users")
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(userRequest)))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    @Description("Should return 400 if user with no name is provided")
-    void shouldReturn400IfUserWithNoNameIsProvided() throws Exception {
-        CreateUserRequest userRequest = CreateUserRequest
-                .builder()
-                .email("valid@mail.com")
-                .build();
-
-        mockMvc.perform(post("/users")
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(userRequest)))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    @Description("Should return 201 http status and created user when valid user is provided")
-    void shouldReturn201IfValidUserIsProvided() throws Exception {
-        CreateUserRequest userRequest = CreateUserRequest
-                .builder()
-                .name("Valid Name")
-                .email("valid@mail.com")
-                .build();
-
-        Mockito.when(createUserInteractor.execute(Mockito.any())).thenReturn(mockUser);
-
-        mockMvc.perform(post("/users")
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(userRequest)))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", is(mockUser.getId().toString())))
-                .andExpect(jsonPath("$.name", is(mockUser.getName())))
-                .andExpect(jsonPath("$.email", is(mockUser.getEmail())))
-                .andExpect(jsonPath("$.singleDigits", hasSize(0)));
     }
 
     @Test
@@ -172,30 +115,4 @@ class UserControllerTest {
                 .andExpect(status().reason("Resource not found"));
     }
 
-    @Test
-    @Description("Should return 204 http status when delete existing user")
-    void shouldReturn204WhenDeleteExistingUser() throws Exception {
-        Mockito.when(findUserInteractor.execute(mockUserUUID)).thenReturn(mockUser);
-        Mockito.doNothing().when(deleteUserInteractor).execute(mockUserUUID);
-
-        mockMvc.perform(delete("/users/" + mockUserUUID)
-                .contentType("application/json"))
-                .andExpect(status().isNoContent());
-
-        verify(deleteUserInteractor, times(1)).execute(mockUserUUID);
-    }
-
-    @Test
-    @Description("Should return 404 http status when no exist user with provided id")
-    void shouldReturn404WhenNoExistUserWithProvidedId() throws Exception {
-        Mockito.doThrow(new NotFoundException("resource", mockUserUUID)).when(deleteUserInteractor).execute(mockUserUUID);
-
-        mockMvc.perform(delete("/users/" + mockUserUUID)
-                .contentType("application/json"))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isNotFound())
-                .andExpect(status().reason("Resource not found"));
-
-        verify(deleteUserInteractor, times(1)).execute(mockUserUUID);
-    }
 }
