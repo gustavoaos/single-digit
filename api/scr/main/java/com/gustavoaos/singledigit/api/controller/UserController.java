@@ -56,7 +56,11 @@ public class UserController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") String id) {
-        this.deleteUserInteractor.execute(id);
+        try {
+            this.deleteUserInteractor.execute(id);
+        } catch (NotFoundException err) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, err.getMessage());
+        }
     }
 
 }

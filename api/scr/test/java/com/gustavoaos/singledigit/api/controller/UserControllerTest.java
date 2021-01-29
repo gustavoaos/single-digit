@@ -176,4 +176,16 @@ class UserControllerTest {
                 .contentType("application/json"))
                 .andExpect(status().isNoContent());
     }
+
+    @Test
+    @Description("Should return 404 http status when no exist user with provided id")
+    void shouldReturn404WhenNoExistUserWithProvidedId() throws Exception {
+        Mockito.doThrow(new NotFoundException("resource", mockUserUUID)).when(deleteUserInteractor).execute(mockUserUUID);
+
+        mockMvc.perform(delete("/users/" + mockUserUUID)
+                .contentType("application/json"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isNotFound())
+                .andExpect(status().reason("Resource not found"));
+    }
 }
