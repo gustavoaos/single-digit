@@ -23,6 +23,8 @@ import java.util.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -175,6 +177,8 @@ class UserControllerTest {
         mockMvc.perform(delete("/users/" + mockUserUUID)
                 .contentType("application/json"))
                 .andExpect(status().isNoContent());
+
+        verify(deleteUserInteractor, times(1)).execute(mockUserUUID);
     }
 
     @Test
@@ -187,5 +191,7 @@ class UserControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isNotFound())
                 .andExpect(status().reason("Resource not found"));
+
+        verify(deleteUserInteractor, times(1)).execute(mockUserUUID);
     }
 }
