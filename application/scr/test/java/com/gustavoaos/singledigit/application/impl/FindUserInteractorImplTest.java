@@ -1,7 +1,9 @@
 package com.gustavoaos.singledigit.application.impl;
 
 import com.gustavoaos.singledigit.application.response.UserResponse;
+import com.gustavoaos.singledigit.domain.SingleDigit;
 import com.gustavoaos.singledigit.domain.User;
+import com.gustavoaos.singledigit.domain.exception.NotFoundException;
 import com.gustavoaos.singledigit.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,11 +12,12 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Description;
 
+import java.security.InvalidParameterException;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -46,6 +49,18 @@ class FindUserInteractorImplTest {
         UserResponse response = UserResponse.builder().id(uuid.toString()).name(name).email(email).build();
 
         assertThat(sut.execute(uuid.toString())).isEqualTo(response);
+    }
+
+    @Test
+    @Description("Should throw a NotFoundException when invalid id is provided")
+    void shouldThrowANotFoundExceptionWhenInValidIdIsProvided() {
+        String invalidId = uuid.toString();
+
+        when(userRepository.findById(uuid)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> sut.execute(invalidId))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("Resource not found");
     }
 
 }
