@@ -4,6 +4,7 @@ import com.gustavoaos.singledigit.application.CreateUserInteractor;
 import com.gustavoaos.singledigit.application.FindUserInteractor;
 import com.gustavoaos.singledigit.application.request.CreateUserRequest;
 import com.gustavoaos.singledigit.application.response.UserResponse;
+import com.gustavoaos.singledigit.domain.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,8 +41,12 @@ public class UserController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody ResponseEntity<UserResponse> find(@PathVariable("id") String id) {
-        UserResponse user = this.findUserInteractor.execute(id);
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+        try {
+            UserResponse user = this.findUserInteractor.execute(id);
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+        } catch (NotFoundException err) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, err.getMessage());
+        }
     }
 
 }
