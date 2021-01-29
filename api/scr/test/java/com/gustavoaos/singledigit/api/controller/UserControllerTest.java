@@ -2,6 +2,7 @@ package com.gustavoaos.singledigit.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gustavoaos.singledigit.application.CreateUserInteractor;
+import com.gustavoaos.singledigit.application.DeleteUserInteractor;
 import com.gustavoaos.singledigit.application.FindUserInteractor;
 import com.gustavoaos.singledigit.application.request.CreateUserRequest;
 import com.gustavoaos.singledigit.application.response.UserResponse;
@@ -40,6 +41,9 @@ class UserControllerTest {
 
     @MockBean
     private FindUserInteractor findUserInteractor;
+
+    @MockBean
+    private DeleteUserInteractor deleteUserInteractor;
 
     private String mockUserUUID;
     private UserResponse mockUser;
