@@ -37,7 +37,7 @@ class CreateUserInteractorImplTest {
         email = "joe@doe.com";
 
         user = User.builder().uuid(uuid).name(name).email(email).build();
-        when(userRepository.create(any())).thenReturn(user);
+        when(userRepository.save(any())).thenReturn(user);
     }
 
     @Test

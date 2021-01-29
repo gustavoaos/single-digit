@@ -1,8 +1,14 @@
 package com.gustavoaos.singledigit.domain.repository;
 
 import com.gustavoaos.singledigit.domain.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface UserRepository {
+import java.util.UUID;
 
-    User create(User user);
+@Repository
+public interface UserRepository extends JpaRepository<User, UUID> {
+
+    @Override
+    <S extends User> S save(S s);
 }

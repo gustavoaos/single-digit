@@ -22,7 +22,7 @@ public class CreateUserInteractorImpl implements CreateUserInteractor {
     @Override
     public UserResponse execute(CreateUserRequest request) {
         User user = request.toDomain();
-        User domainUser = this.userRepository.create(user);
+        User domainUser = this.userRepository.save(user);
         return UserResponse.from(domainUser);
     }
 }
