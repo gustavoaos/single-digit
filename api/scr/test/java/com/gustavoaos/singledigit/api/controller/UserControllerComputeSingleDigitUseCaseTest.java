@@ -137,4 +137,20 @@ class UserControllerComputeSingleDigitUseCaseTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    @Description("Should return 400 http status when k is out of bound limits")
+    void shouldReturn400WhenKIsOutOfBoundLimits() throws Exception {
+        ComputeSingleDigitRequest request = ComputeSingleDigitRequest.builder().n("9875").k("-4").build();
+
+        Mockito.when(computeSingleDigitInteractor.execute(
+                Mockito.any()
+        )).thenThrow(new ParameterOutOfRangeException("k", "1", "10^5"));
+
+        mockMvc.perform(get("/users/compute")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(request)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isBadRequest());
+    }
+
 }
