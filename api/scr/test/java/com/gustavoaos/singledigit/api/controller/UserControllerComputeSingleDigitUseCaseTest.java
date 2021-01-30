@@ -95,4 +95,16 @@ class UserControllerComputeSingleDigitUseCaseTest {
 
         assertThat(Integer.parseInt(resContent)).isEqualTo(expected);
     }
+
+    @Test
+    @Description("Should return 400 http status when n is not provided")
+    void shouldReturn400WhenNIsNotProvided() throws Exception {
+        ComputeSingleDigitRequest request = ComputeSingleDigitRequest.builder().k("4").build();
+
+        mockMvc.perform(get("/users/compute")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(request)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isBadRequest());
+    }
 }

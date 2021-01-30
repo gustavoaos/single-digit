@@ -90,6 +90,9 @@ public class UserController {
     public @ResponseBody ResponseEntity<Integer> compute(
             @RequestParam(name = "id", required = false) String id,
             @RequestBody ComputeSingleDigitRequest request) {
+        if (request.getN() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing argument");
+        }
         Integer res = this.computeSingleDigitInteractor.execute(request);
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
