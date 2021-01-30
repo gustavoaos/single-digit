@@ -62,4 +62,15 @@ class UpdateUserInteractorImplTest {
         )).isEqualTo(response);
     }
 
+    @Test
+    @Description("Should throw NotFoundException when invalid id is provided")
+    void shouldThrowNotFoundExceptionWhenInvalidIdIsProvided() {
+        String invalidId = uuid.toString();
+        when(userRepository.findById(uuid)).thenThrow(new NotFoundException("user", uuid.toString()));
+
+        assertThatThrownBy(() -> sut.execute(invalidId, updatedUser))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("Resource not found");
+    }
+
 }
