@@ -6,7 +6,7 @@ import com.gustavoaos.singledigit.application.request.ComputeSingleDigitRequest;
 import com.gustavoaos.singledigit.application.request.UpdateUserRequest;
 import com.gustavoaos.singledigit.application.response.UserResponse;
 import com.gustavoaos.singledigit.domain.exception.NotFoundException;
-import com.gustavoaos.singledigit.domain.exception.ParameterOutOfRangeException;
+import com.gustavoaos.singledigit.domain.exception.ArgumentOutOfRangeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -104,7 +104,7 @@ public class UserController {
             }
 
             return ResponseEntity.status(HttpStatus.OK).body(sd);
-        } catch (ParameterOutOfRangeException | NotFoundException err) {
+        } catch (ArgumentOutOfRangeException | NotFoundException err) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, err.getMessage());
         }
     }

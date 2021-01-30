@@ -1,6 +1,6 @@
 package com.gustavoaos.singledigit.domain;
 
-import com.gustavoaos.singledigit.domain.exception.ParameterOutOfRangeException;
+import com.gustavoaos.singledigit.domain.exception.ArgumentOutOfRangeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -17,8 +17,8 @@ class SingleDigitTest {
 
     String n;
     String k;
-    String nParameterOutOfRangeExceptionMessage = "Parameter n must be greater than 1 and lower than 10ˆ1000000.";
-    String kParameterOutOfRangeExceptionMessage = "Parameter k must be greater than 1 and lower than 10ˆ5.";
+    String nArgumentOutOfRangeExceptionMessage = "Argument n must be greater than 1 and lower than 10ˆ1000000.";
+    String kArgumentOutOfRangeExceptionMessage = "Argument k must be greater than 1 and lower than 10ˆ5.";
 
     @BeforeEach
     void initEach() {
@@ -33,8 +33,8 @@ class SingleDigitTest {
         k = "1";
 
         assertThatThrownBy(() -> new SingleDigit(n, k))
-                .isInstanceOf(ParameterOutOfRangeException.class)
-                .hasMessage(nParameterOutOfRangeExceptionMessage);
+                .isInstanceOf(ArgumentOutOfRangeException.class)
+                .hasMessage(nArgumentOutOfRangeExceptionMessage);
 
     }
 
@@ -45,8 +45,8 @@ class SingleDigitTest {
         k = "-1";
 
         assertThatThrownBy(() -> new SingleDigit(n, k))
-                .isInstanceOf(ParameterOutOfRangeException.class)
-                .hasMessage(kParameterOutOfRangeExceptionMessage);
+                .isInstanceOf(ArgumentOutOfRangeException.class)
+                .hasMessage(kArgumentOutOfRangeExceptionMessage);
 
     }
 
@@ -57,8 +57,8 @@ class SingleDigitTest {
         k = "1";
 
         assertThatThrownBy(() -> new SingleDigit(n, k))
-                .isInstanceOf(ParameterOutOfRangeException.class)
-                .hasMessage(nParameterOutOfRangeExceptionMessage);
+                .isInstanceOf(ArgumentOutOfRangeException.class)
+                .hasMessage(nArgumentOutOfRangeExceptionMessage);
 
     }
 
@@ -69,8 +69,8 @@ class SingleDigitTest {
         k = "0";
 
         assertThatThrownBy(() -> new SingleDigit(n, k))
-                .isInstanceOf(ParameterOutOfRangeException.class)
-                .hasMessage(kParameterOutOfRangeExceptionMessage);
+                .isInstanceOf(ArgumentOutOfRangeException.class)
+                .hasMessage(kArgumentOutOfRangeExceptionMessage);
 
     }
 
@@ -104,8 +104,8 @@ class SingleDigitTest {
         k = "1";
 
         assertThatThrownBy(() -> new SingleDigit(n, k))
-                .isInstanceOf(ParameterOutOfRangeException.class)
-                .hasMessage(nParameterOutOfRangeExceptionMessage);
+                .isInstanceOf(ArgumentOutOfRangeException.class)
+                .hasMessage(nArgumentOutOfRangeExceptionMessage);
     }
 
     @Test
@@ -116,8 +116,8 @@ class SingleDigitTest {
         n = "1";
 
         assertThatThrownBy(() -> new SingleDigit(n, k))
-                .isInstanceOf(ParameterOutOfRangeException.class)
-                .hasMessage(kParameterOutOfRangeExceptionMessage);
+                .isInstanceOf(ArgumentOutOfRangeException.class)
+                .hasMessage(kArgumentOutOfRangeExceptionMessage);
     }
 
     @Test

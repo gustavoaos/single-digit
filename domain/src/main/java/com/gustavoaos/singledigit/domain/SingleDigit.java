@@ -1,6 +1,6 @@
 package com.gustavoaos.singledigit.domain;
 
-import com.gustavoaos.singledigit.domain.exception.ParameterOutOfRangeException;
+import com.gustavoaos.singledigit.domain.exception.ArgumentOutOfRangeException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,10 +32,10 @@ public class SingleDigit implements Serializable {
         BigInteger kBigInt = new BigInteger(k);
 
         if (isLowerThanMinimumValue(nBigInt) || this.isGreaterThanMaximumValue(nBigInt, MAXIMUM_VALUE_N)) {
-            throw new ParameterOutOfRangeException("n", "1", "10ˆ1000000");
+            throw new ArgumentOutOfRangeException("n", "1", "10ˆ1000000");
         }
         if (isLowerThanMinimumValue(kBigInt) || this.isGreaterThanMaximumValue(kBigInt, MAXIMUM_VALUE_K)) {
-            throw new ParameterOutOfRangeException("k", "1", "10ˆ5");
+            throw new ArgumentOutOfRangeException("k", "1", "10ˆ5");
         }
 
         this.n = n;

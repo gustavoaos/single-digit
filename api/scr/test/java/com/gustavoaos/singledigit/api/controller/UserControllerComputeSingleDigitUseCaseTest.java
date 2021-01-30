@@ -6,7 +6,7 @@ import com.gustavoaos.singledigit.application.request.ComputeSingleDigitRequest;
 import com.gustavoaos.singledigit.application.response.UserResponse;
 import com.gustavoaos.singledigit.domain.SingleDigit;
 import com.gustavoaos.singledigit.domain.exception.NotFoundException;
-import com.gustavoaos.singledigit.domain.exception.ParameterOutOfRangeException;
+import com.gustavoaos.singledigit.domain.exception.ArgumentOutOfRangeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -119,7 +119,7 @@ class UserControllerComputeSingleDigitUseCaseTest {
 
         Mockito.when(computeSingleDigitInteractor.execute(
                 Mockito.any()
-        )).thenThrow(new ParameterOutOfRangeException("n", "1", "10^100000"));
+        )).thenThrow(new ArgumentOutOfRangeException("n", "1", "10^100000"));
 
         mockMvc.perform(get("/users/compute")
                 .contentType("application/json")
@@ -137,7 +137,7 @@ class UserControllerComputeSingleDigitUseCaseTest {
 
         Mockito.when(computeSingleDigitInteractor.execute(
                 Mockito.any()
-        )).thenThrow(new ParameterOutOfRangeException("k", "1", "10^5"));
+        )).thenThrow(new ArgumentOutOfRangeException("k", "1", "10^5"));
 
         mockMvc.perform(get("/users/compute")
                 .contentType("application/json")
