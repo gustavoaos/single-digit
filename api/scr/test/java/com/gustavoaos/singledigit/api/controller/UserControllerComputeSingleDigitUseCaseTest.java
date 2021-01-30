@@ -170,4 +170,30 @@ class UserControllerComputeSingleDigitUseCaseTest {
                 .execute(Mockito.any());
     }
 
+    @Test
+    @Description("Should return 200 http status and computes single digit when valid n, k and id are provided")
+    void shouldReturn200AndComputesSingleDigitWhenValidParametersAreProvided() throws Exception {
+        ComputeSingleDigitRequest request = ComputeSingleDigitRequest.builder().n("9875").k("4").build();
+        Integer expected = 8;
+
+        Mockito.when(computeSingleDigitInteractor.execute(
+                Mockito.any(), Mockito.anyString()
+        )).thenReturn(expected);
+
+        MvcResult res = mockMvc.perform(get("/users/compute?id=" + mockUserUUID)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(request)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String resContent = res.getResponse().getContentAsString();
+
+        Mockito.verify(computeSingleDigitInteractor, Mockito.times(1))
+                .execute(Mockito.any(), Mockito.anyString());
+        Mockito.verify(computeSingleDigitInteractor, Mockito.times(0))
+                .execute(Mockito.any());
+
+        assertThat(Integer.parseInt(resContent)).isEqualTo(expected);
+    }
+
 }
