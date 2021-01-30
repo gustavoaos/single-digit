@@ -116,42 +116,42 @@ class SingleDigitTest {
         SingleDigit stu = new SingleDigit("7", "1");
         int expected = 7;
 
-        assertThat(stu.calculate()).isEqualTo(expected);
+        assertThat(stu.compute()).isEqualTo(expected);
     }
 
     @Test
-    @DisplayName("Should calculates single digit when n is greater than 10 and K is equals to 1")
-    void shouldCalculatesSingleDigitWhenNIsGreaterThanTen() {
+    @DisplayName("Should compute single digit when n is greater than 10 and K is equals to 1")
+    void shouldComputeSingleDigitWhenNIsGreaterThanTen() {
         SingleDigit stu = new SingleDigit("16", "1");
         int expected = 7;
 
-        assertThat(stu.calculate()).isEqualTo(expected);
+        assertThat(stu.compute()).isEqualTo(expected);
     }
 
     @Test
-    @DisplayName("Should calculates single digit when n and k are greater than 10")
-    void shouldCalculatesSingleDigitWhenNAndKAreGreaterThanTen() {
+    @DisplayName("Should compute single digit when n and k are greater than 10")
+    void shouldComputeSingleDigitWhenNAndKAreGreaterThanTen() {
         SingleDigit stu = new SingleDigit("9875", "4");
         int expected = 8;
 
-        assertThat(stu.calculate()).isEqualTo(expected);
+        assertThat(stu.compute()).isEqualTo(expected);
     }
 
     @Test
-    @DisplayName("Should calculates single digit when mod times k is greater than 10")
-    void shouldCalculatesSingleDigitWhenModTimesKIsGreaterThanTen() {
+    @DisplayName("Should compute single digit when mod times k is greater than 10")
+    void shouldComputeSingleDigitWhenModTimesKIsGreaterThanTen() {
         SingleDigit stu = new SingleDigit("9881", "4");
         int expected = 8;
 
-        assertThat(stu.calculate()).isEqualTo(expected);
+        assertThat(stu.compute()).isEqualTo(expected);
     }
 
     @Test
-    @DisplayName("Should calculates single digit when mod is equals to 9")
-    void shouldCalculatesSingleDigitWhenModIsEqualsToNine() {
+    @DisplayName("Should compute single digit when mod is equals to 9")
+    void shouldComputeSingleDigitWhenModIsEqualsToNine() {
         SingleDigit stu = new SingleDigit("9", "1");
         int expected = 9;
 
-        assertThat(stu.calculate()).isEqualTo(expected);
+        assertThat(stu.compute()).isEqualTo(expected);
     }
 }

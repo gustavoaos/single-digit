@@ -48,7 +48,7 @@ public class SingleDigit implements Serializable {
         this.k = k;
     }
 
-    public int calculate() {
+    public int compute() {
         BigInteger bigN = new BigInteger(this.n);
         BigInteger bigK = new BigInteger(this.k);
 
