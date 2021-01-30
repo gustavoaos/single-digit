@@ -20,6 +20,10 @@ public class CreateUserInteractorImpl implements CreateUserInteractor {
 
     @Override
     public UserResponse execute(CreateUserRequest request) {
+        if (request == null) {
+            throw new IllegalArgumentException("Missing argument of type CreateUserRequest");
+        }
+
         User user = request.toDomain();
         User domainUser = this.userRepository.save(user);
         return UserResponse.from(domainUser);

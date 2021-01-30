@@ -25,10 +25,10 @@ class CreateUserInteractorImplTest {
     @InjectMocks
     private CreateUserInteractorImpl sut;
 
-    private User user;
     private UUID uuid;
     private String name;
     private String email;
+    private UserResponse response;
 
     @BeforeEach
     void setMockOutput() {
@@ -36,17 +36,29 @@ class CreateUserInteractorImplTest {
         name = "Joe Doe";
         email = "joe@doe.com";
 
-        user = User.builder().uuid(uuid).name(name).email(email).build();
+        User user = User.builder().uuid(uuid).name(name).email(email).build();
+        response = UserResponse.builder().id(uuid.toString()).name(name).email(email).build();
+
         when(userRepository.save(any())).thenReturn(user);
+
+        // Mockito does not support mocking static methods
+        // when(UserResponse.from(user)).thenReturn(response);
     }
 
     @Test
     @Description("Should return an UserResponse when valid UserRequest is provided")
     void shouldReturnAnUserResponseWhenValidUserRequestIsProvided() {
-        UserResponse response = UserResponse.builder().id(uuid.toString()).name(name).email(email).build();
         CreateUserRequest request = CreateUserRequest.builder().name(name).email(email).build();
 
         assertThat(sut.execute(request)).isEqualTo(response);
+    }
+
+    @Test
+    @Description("Should throw an IllegalArgumentException when request is null")
+    void shouldThrowAnIllegalArgumentExceptionWhenRequestIsNull() {
+        assertThatThrownBy(() -> sut.execute(null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Missing argument of type CreateUserRequest");
     }
 
 }
