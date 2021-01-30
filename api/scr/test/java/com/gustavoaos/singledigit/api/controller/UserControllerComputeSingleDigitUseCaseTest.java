@@ -2,6 +2,7 @@ package com.gustavoaos.singledigit.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gustavoaos.singledigit.application.*;
+import com.gustavoaos.singledigit.application.request.UpdateUserRequest;
 import com.gustavoaos.singledigit.application.response.UserResponse;
 import com.gustavoaos.singledigit.domain.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,13 +18,17 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import java.util.Collections;
 import java.util.UUID;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = UserController.class)
-class UserControllerDeleteUserUseCaseTest {
+class UserControllerComputeSingleDigitUseCaseTest {
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     private MockMvc mockMvc;
@@ -45,6 +50,8 @@ class UserControllerDeleteUserUseCaseTest {
 
     private String mockUserUUID;
     private UserResponse mockUser;
+    private UserResponse updatedUser;
+    private UpdateUserRequest request;
 
     @BeforeEach
     void initEach() {
@@ -56,33 +63,18 @@ class UserControllerDeleteUserUseCaseTest {
                 .email("valid@mail.com")
                 .singleDigits(Collections.emptyList())
                 .build();
+        updatedUser = UserResponse
+                .builder()
+                .id(mockUserUUID)
+                .name("Updated name")
+                .email("updated@mail.com")
+                .singleDigits(Collections.emptyList())
+                .build();
+        request = UpdateUserRequest
+                .builder()
+                .name("Updated name")
+                .email("updated@mail.com")
+                .build();
     }
-
-    @Test
-    @Description("Should return 204 http status when delete existing user")
-    void shouldReturn204WhenDeleteExistingUser() throws Exception {
-        Mockito.when(findUserInteractor.execute(mockUserUUID)).thenReturn(mockUser);
-        Mockito.doNothing().when(deleteUserInteractor).execute(mockUserUUID);
-
-        mockMvc.perform(delete("/users/" + mockUserUUID)
-                .contentType("application/json"))
-                .andExpect(status().isNoContent());
-
-        verify(deleteUserInteractor, times(1)).execute(mockUserUUID);
-    }
-
-    @Test
-    @Description("Should return 404 http status when no exist user with provided id")
-    void shouldReturn404WhenNoExistUserWithProvidedId() throws Exception {
-        Mockito.doThrow(new NotFoundException("resource", mockUserUUID)).when(deleteUserInteractor).execute(mockUserUUID);
-
-        mockMvc.perform(delete("/users/" + mockUserUUID)
-                .contentType("application/json"))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isNotFound())
-                .andExpect(status().reason("Resource not found"));
-
-        verify(deleteUserInteractor, times(1)).execute(mockUserUUID);
-    }
-
+    
 }

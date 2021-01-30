@@ -1,10 +1,8 @@
 package com.gustavoaos.singledigit.api.controller;
 
-import com.gustavoaos.singledigit.application.CreateUserInteractor;
-import com.gustavoaos.singledigit.application.DeleteUserInteractor;
-import com.gustavoaos.singledigit.application.FindUserInteractor;
-import com.gustavoaos.singledigit.application.UpdateUserInteractor;
+import com.gustavoaos.singledigit.application.*;
 import com.gustavoaos.singledigit.application.request.CreateUserRequest;
+import com.gustavoaos.singledigit.application.request.ComputeSingleDigitRequest;
 import com.gustavoaos.singledigit.application.request.UpdateUserRequest;
 import com.gustavoaos.singledigit.application.response.UserResponse;
 import com.gustavoaos.singledigit.domain.exception.NotFoundException;
@@ -22,18 +20,21 @@ public class UserController {
     private final FindUserInteractor findUserInteractor;
     private final DeleteUserInteractor deleteUserInteractor;
     private final UpdateUserInteractor updateUserInteractor;
+    private final ComputeSingleDigitInteractor computeSingleDigitInteractor;
 
     @Autowired
     public UserController(
             CreateUserInteractor createUserInteractor,
             FindUserInteractor findUserInteractor,
             DeleteUserInteractor deleteUserInteractor,
-            UpdateUserInteractor updateUserInteractor
+            UpdateUserInteractor updateUserInteractor,
+            ComputeSingleDigitInteractor computeSingleDigitInteractor
     ) {
         this.createUserInteractor = createUserInteractor;
         this.findUserInteractor = findUserInteractor;
         this.deleteUserInteractor = deleteUserInteractor;
         this.updateUserInteractor = updateUserInteractor;
+        this.computeSingleDigitInteractor = computeSingleDigitInteractor;
     }
 
     @PostMapping
@@ -82,6 +83,15 @@ public class UserController {
         } catch (NotFoundException err) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, err.getMessage());
         }
+    }
+
+    @GetMapping("/compute")
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody ResponseEntity<Integer> compute(
+            @RequestParam(name = "id", required = false) String id,
+            @RequestBody ComputeSingleDigitRequest request) {
+        Integer res = this.computeSingleDigitInteractor.execute(request);
+        return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
 }

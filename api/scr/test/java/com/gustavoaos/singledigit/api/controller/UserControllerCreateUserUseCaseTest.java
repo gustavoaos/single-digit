@@ -1,10 +1,7 @@
 package com.gustavoaos.singledigit.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gustavoaos.singledigit.application.CreateUserInteractor;
-import com.gustavoaos.singledigit.application.DeleteUserInteractor;
-import com.gustavoaos.singledigit.application.FindUserInteractor;
-import com.gustavoaos.singledigit.application.UpdateUserInteractor;
+import com.gustavoaos.singledigit.application.*;
 import com.gustavoaos.singledigit.application.request.CreateUserRequest;
 import com.gustavoaos.singledigit.application.response.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,6 +42,9 @@ class UserControllerCreateUserUseCaseTest {
 
     @MockBean
     private UpdateUserInteractor updateUserInteractor;
+
+    @MockBean
+    private ComputeSingleDigitInteractor computeSingleDigitInteractor;
 
     private UserResponse mockUser;
 
