@@ -3,8 +3,9 @@ package com.gustavoaos.singledigit.api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gustavoaos.singledigit.application.*;
 import com.gustavoaos.singledigit.application.request.ComputeSingleDigitRequest;
-import com.gustavoaos.singledigit.application.request.UpdateUserRequest;
 import com.gustavoaos.singledigit.application.response.UserResponse;
+import com.gustavoaos.singledigit.domain.SingleDigit;
+import com.gustavoaos.singledigit.domain.exception.NotFoundException;
 import com.gustavoaos.singledigit.domain.exception.ParameterOutOfRangeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,42 +51,31 @@ class UserControllerComputeSingleDigitUseCaseTest {
 
     private String mockUserUUID;
     private UserResponse mockUser;
-    private UserResponse updatedUser;
-    private UpdateUserRequest request;
+    private SingleDigit mockSd;
 
     @BeforeEach
     void initEach() {
+        mockSd = new SingleDigit("9875", "4");
         mockUserUUID = UUID.randomUUID().toString();
         mockUser = UserResponse
                 .builder()
                 .id(mockUserUUID)
-                .name("Valid Name")
-                .email("valid@mail.com")
-                .singleDigits(Collections.emptyList())
-                .build();
-        updatedUser = UserResponse
-                .builder()
-                .id(mockUserUUID)
-                .name("Updated name")
-                .email("updated@mail.com")
-                .singleDigits(Collections.emptyList())
-                .build();
-        request = UpdateUserRequest
-                .builder()
-                .name("Updated name")
-                .email("updated@mail.com")
+                .name("Joe Doe")
+                .email("joedoe@mail.com")
+                .singleDigits(Collections.singletonList(mockSd))
                 .build();
     }
 
     @Test
     @Description("Should return 200 http status and single digit when valid n and k are provided")
     void shouldReturn200AndSingleDigitWhenValidNAndKAreProvided() throws Exception {
+        ComputeSingleDigitRequest request = ComputeSingleDigitRequest.builder().n("9875").k("4").build();
         Integer expected = 8;
+
         Mockito.when(computeSingleDigitInteractor.execute(
                 Mockito.any()
         )).thenReturn(expected);
 
-        ComputeSingleDigitRequest request = ComputeSingleDigitRequest.builder().n("9875").k("4").build();
         MvcResult res = mockMvc.perform(get("/users/compute")
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(request)))
@@ -94,6 +84,7 @@ class UserControllerComputeSingleDigitUseCaseTest {
                 .andReturn();
         String resContent = res.getResponse().getContentAsString();
 
+        Mockito.verify(computeSingleDigitInteractor, Mockito.times(1)).execute(Mockito.any());
         assertThat(Integer.parseInt(resContent)).isEqualTo(expected);
     }
 
@@ -135,6 +126,8 @@ class UserControllerComputeSingleDigitUseCaseTest {
                 .content(objectMapper.writeValueAsString(request)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isBadRequest());
+
+        Mockito.verify(computeSingleDigitInteractor, Mockito.times(1)).execute(Mockito.any());
     }
 
     @Test
@@ -151,6 +144,30 @@ class UserControllerComputeSingleDigitUseCaseTest {
                 .content(objectMapper.writeValueAsString(request)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isBadRequest());
+
+        Mockito.verify(computeSingleDigitInteractor, Mockito.times(1)).execute(Mockito.any());
+    }
+
+    @Test
+    @Description("Should return 400 http when invalid id is provided")
+    void shouldReturn400WhenInValidIdIsProvided() throws Exception {
+        ComputeSingleDigitRequest request = ComputeSingleDigitRequest.builder().n("9875").k("4").build();
+        Integer expected = 8;
+
+        Mockito.when(computeSingleDigitInteractor.execute(
+                Mockito.any(), Mockito.anyString()
+        )).thenThrow(new NotFoundException("user", mockUserUUID));
+
+        mockMvc.perform(get("/users/compute?id=" + mockUserUUID)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(request)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isBadRequest());
+
+        Mockito.verify(computeSingleDigitInteractor, Mockito.times(1))
+                .execute(Mockito.any(), Mockito.anyString());
+        Mockito.verify(computeSingleDigitInteractor, Mockito.times(0))
+                .execute(Mockito.any());
     }
 
 }

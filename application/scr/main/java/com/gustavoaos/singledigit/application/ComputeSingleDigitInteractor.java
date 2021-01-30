@@ -6,5 +6,5 @@ public interface ComputeSingleDigitInteractor {
 
     Integer execute(ComputeSingleDigitRequest request);
 
-    Integer execute(String id, ComputeSingleDigitRequest request);
+    Integer execute(ComputeSingleDigitRequest request, String id);
 }

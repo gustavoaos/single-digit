@@ -95,10 +95,16 @@ public class UserController {
             if (request.getN() == null || request.getK() == null) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing argument");
             }
+            Integer sd;
 
-            Integer res = this.computeSingleDigitInteractor.execute(request);
-            return ResponseEntity.status(HttpStatus.OK).body(res);
-        } catch (ParameterOutOfRangeException err) {
+            if (id != null) {
+                sd  = this.computeSingleDigitInteractor.execute(request, id);
+            } else {
+                sd  = this.computeSingleDigitInteractor.execute(request);
+            }
+
+            return ResponseEntity.status(HttpStatus.OK).body(sd);
+        } catch (ParameterOutOfRangeException | NotFoundException err) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, err.getMessage());
         }
     }

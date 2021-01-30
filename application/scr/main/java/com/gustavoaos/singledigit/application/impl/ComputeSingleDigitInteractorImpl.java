@@ -24,7 +24,7 @@ public class ComputeSingleDigitInteractorImpl implements ComputeSingleDigitInter
     }
 
     @Override
-    public Integer execute(String id, ComputeSingleDigitRequest request) {
+    public Integer execute(ComputeSingleDigitRequest request, String id) {
         return null;
     }
 }
