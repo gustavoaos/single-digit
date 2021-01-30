@@ -1,5 +1,6 @@
 package com.gustavoaos.singledigit.domain;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
@@ -15,32 +16,31 @@ public class SingleDigit implements Serializable {
     private static final BigInteger MAXIMUM_VALUE_N = BigInteger.valueOf(10).pow(10^1000000);
     private static final BigInteger MAXIMUM_VALUE_K = BigInteger.valueOf(10).pow(5);
 
-    private String n;
-    private String k;
+    @Getter private String n;
+    @Getter private String k;
 
-    private boolean isLowerThanMinimumValue(String s) {
-        BigInteger value = new BigInteger(s);
-
+    private boolean isLowerThanMinimumValue(BigInteger value) {
         return value.intValue() < MINIMUM_VALUE;
     }
 
-    private boolean isGreaterThanMaximumValue(String s, BigInteger upperBound) {
-        BigInteger value = new BigInteger(s);
-
+    private boolean isGreaterThanMaximumValue(BigInteger value, BigInteger upperBound) {
         return value.compareTo(upperBound) > 0;
     }
 
     public SingleDigit(String n, String k) {
-        if (isLowerThanMinimumValue(n)) {
+        BigInteger nBigInt = new BigInteger(n);
+        BigInteger kBigInt = new BigInteger(k);
+
+        if (isLowerThanMinimumValue(nBigInt)) {
             throw new InvalidParameterException("N should be greater or equals to 1");
         }
-        if (isLowerThanMinimumValue(k)) {
+        if (isLowerThanMinimumValue(kBigInt)) {
             throw new InvalidParameterException("K should be greater or equals to 1");
         }
-        if (this.isGreaterThanMaximumValue(n, MAXIMUM_VALUE_N)) {
+        if (this.isGreaterThanMaximumValue(nBigInt, MAXIMUM_VALUE_N)) {
             throw new InvalidParameterException("N should be lower than inputted value");
         }
-        if (this.isGreaterThanMaximumValue(k, MAXIMUM_VALUE_K)) {
+        if (this.isGreaterThanMaximumValue(kBigInt, MAXIMUM_VALUE_K)) {
             throw new InvalidParameterException("K should be lower than inputted value");
         }
 

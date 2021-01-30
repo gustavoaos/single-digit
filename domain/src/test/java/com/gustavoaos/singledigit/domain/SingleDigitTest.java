@@ -1,5 +1,6 @@
 package com.gustavoaos.singledigit.domain;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,8 +15,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 class SingleDigitTest {
 
-    String n = "";
-    String k = "";
+    String n;
+    String k;
+
+    @BeforeEach
+    void initEach() {
+        n = null;
+        k = null;
+    }
 
     @Test
     @DisplayName("Should throws an Invalid Parameter Exception when N is negative")
