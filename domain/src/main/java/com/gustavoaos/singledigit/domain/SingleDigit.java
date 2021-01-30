@@ -1,12 +1,12 @@
 package com.gustavoaos.singledigit.domain;
 
+import com.gustavoaos.singledigit.domain.exception.ParameterOutOfRangeException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.security.InvalidParameterException;
 
 @Embeddable
 @NoArgsConstructor
@@ -31,17 +31,11 @@ public class SingleDigit implements Serializable {
         BigInteger nBigInt = new BigInteger(n);
         BigInteger kBigInt = new BigInteger(k);
 
-        if (isLowerThanMinimumValue(nBigInt)) {
-            throw new InvalidParameterException("N should be greater or equals to 1");
+        if (isLowerThanMinimumValue(nBigInt) || this.isGreaterThanMaximumValue(nBigInt, MAXIMUM_VALUE_N)) {
+            throw new ParameterOutOfRangeException("n", "1", "10ˆ1000000");
         }
-        if (isLowerThanMinimumValue(kBigInt)) {
-            throw new InvalidParameterException("K should be greater or equals to 1");
-        }
-        if (this.isGreaterThanMaximumValue(nBigInt, MAXIMUM_VALUE_N)) {
-            throw new InvalidParameterException("N should be lower than inputted value");
-        }
-        if (this.isGreaterThanMaximumValue(kBigInt, MAXIMUM_VALUE_K)) {
-            throw new InvalidParameterException("K should be lower than inputted value");
+        if (isLowerThanMinimumValue(kBigInt) || this.isGreaterThanMaximumValue(kBigInt, MAXIMUM_VALUE_K)) {
+            throw new ParameterOutOfRangeException("k", "1", "10ˆ5");
         }
 
         this.n = n;

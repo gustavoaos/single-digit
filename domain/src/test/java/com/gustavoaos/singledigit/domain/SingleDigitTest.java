@@ -1,5 +1,6 @@
 package com.gustavoaos.singledigit.domain;
 
+import com.gustavoaos.singledigit.domain.exception.ParameterOutOfRangeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -7,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigInteger;
-import java.security.InvalidParameterException;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,6 +17,8 @@ class SingleDigitTest {
 
     String n;
     String k;
+    String nParameterOutOfRangeExceptionMessage = "Parameter n must be greater than 1 and lower than 10ˆ1000000.";
+    String kParameterOutOfRangeExceptionMessage = "Parameter k must be greater than 1 and lower than 10ˆ5.";
 
     @BeforeEach
     void initEach() {
@@ -25,66 +27,65 @@ class SingleDigitTest {
     }
 
     @Test
-    @DisplayName("Should throws an Invalid Parameter Exception when N is negative")
-    void shouldThrowsInvalidParameterExceptionWhenNIsNegative() {
+    @DisplayName("Should throws Parameters Out Of Range Exception when N is negative")
+    void shouldThrowsParameterOutOfRangeExceptionWhenNIsNegative() {
         n = "-1";
         k = "1";
 
         assertThatThrownBy(() -> new SingleDigit(n, k))
-                .isInstanceOf(InvalidParameterException.class)
-                .hasMessage("N should be greater or equals to 1");
+                .isInstanceOf(ParameterOutOfRangeException.class)
+                .hasMessage(nParameterOutOfRangeExceptionMessage);
 
     }
 
     @Test
-    @DisplayName("Should throws an Invalid Parameter Exception when K is negative")
-    void shouldThrowsInvalidParameterExceptionWhenKIsNegative() {
+    @DisplayName("Should throws Parameter Out Of Range Exception when K is negative")
+    void shouldThrowsParameterOutOfRangeExceptionWhenKIsNegative() {
         n = "1";
         k = "-1";
 
         assertThatThrownBy(() -> new SingleDigit(n, k))
-                .isInstanceOf(InvalidParameterException.class)
-                .hasMessage("K should be greater or equals to 1");
+                .isInstanceOf(ParameterOutOfRangeException.class)
+                .hasMessage(kParameterOutOfRangeExceptionMessage);
 
     }
 
     @Test
-    @DisplayName("Should throws an Invalid Parameter Exception when N is zero")
-    void shouldThrowsInvalidParameterExceptionWhenNIsZero() {
+    @DisplayName("Should throws Parameter Out Of Range Exception when N is zero")
+    void shouldThrowsParameterOutOfRangeExceptionWhenNIsZero() {
         n = "0";
         k = "1";
 
         assertThatThrownBy(() -> new SingleDigit(n, k))
-                .isInstanceOf(InvalidParameterException.class)
-                .hasMessage("N should be greater or equals to 1");
+                .isInstanceOf(ParameterOutOfRangeException.class)
+                .hasMessage(nParameterOutOfRangeExceptionMessage);
 
     }
 
     @Test
-    @DisplayName("Should throws an Invalid Parameter Exception when K is zero")
-    void shouldThrowsInvalidParameterExceptionWhenKIsZero() {
+    @DisplayName("Should throws Parameter Out Of Range Exception when K is zero")
+    void shouldThrowsParameterOutOfRangeExceptionWhenKIsZero() {
         n = "1";
         k = "0";
 
         assertThatThrownBy(() -> new SingleDigit(n, k))
-                .isInstanceOf(InvalidParameterException.class)
-                .hasMessage("K should be greater or equals to 1");
+                .isInstanceOf(ParameterOutOfRangeException.class)
+                .hasMessage(kParameterOutOfRangeExceptionMessage);
 
     }
 
     @Test
-    @DisplayName("Should throws an Invalid Parameter Exception when N is invalid string")
+    @DisplayName("Should throws Number Format Exception when N is invalid string")
     void shouldThrowsNumberFormatExceptionWhenNIsInvalidString() {
         n = "invalid_value";
         k = "1";
 
         assertThatThrownBy(() -> new SingleDigit(n, k))
                 .isInstanceOf(NumberFormatException.class);
-
     }
 
     @Test
-    @DisplayName("Should throws an Invalid Parameter Exception when K is invalid string")
+    @DisplayName("Should throws an Number Format Exception when K is invalid string")
     void shouldThrowsNumberFormatExceptionWhenKIsInvalidString() {
         n = "1";
         k = "invalid_value";
@@ -96,25 +97,27 @@ class SingleDigitTest {
 
     @Test
     @Disabled("Slow test: tests N upper bound limit")
-    @DisplayName("Should throws invalid parameter exception if n is greater than maximum value")
-    void shouldThrowsInvalidParametersExceptionIfNIsGreaterThanMaximumValue() {
+    @DisplayName("Should throws Parameter Out Of Range Exception if n is greater than maximum value")
+    void shouldThrowsParameterOutOfRangeExceptionIfNIsGreaterThanMaximumValue() {
         BigInteger max = BigInteger.valueOf(10).pow(10^1000000);
         String n = max.add(BigInteger.ONE).toString();
         k = "1";
 
         assertThatThrownBy(() -> new SingleDigit(n, k))
-                .isInstanceOf(InvalidParameterException.class);
+                .isInstanceOf(ParameterOutOfRangeException.class)
+                .hasMessage(nParameterOutOfRangeExceptionMessage);
     }
 
     @Test
-    @DisplayName("Should throws invalid parameter exception if k is greater than maximum value")
-    void shouldThrowsInvalidParametersExceptionIfKIsGreaterThanMaximumValue() {
+    @DisplayName("Should throws Parameter Out Of Range Exception if k is greater than maximum value")
+    void shouldThrowsParameterOutOfRangeExceptionIfKIsGreaterThanMaximumValue() {
         BigInteger max = BigInteger.valueOf(10).pow(5);
         String k = max.add(BigInteger.ONE).toString();
         n = "1";
 
         assertThatThrownBy(() -> new SingleDigit(n, k))
-                .isInstanceOf(InvalidParameterException.class);
+                .isInstanceOf(ParameterOutOfRangeException.class)
+                .hasMessage(kParameterOutOfRangeExceptionMessage);
     }
 
     @Test
