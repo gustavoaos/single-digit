@@ -27,8 +27,12 @@ public class UpdateUserInteractorImpl implements UpdateUserInteractor {
                 .findById(UUID.fromString(id))
                 .orElseThrow(() -> new NotFoundException("user", id));
 
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
+        if (request.getName() != null) {
+            user.setName(request.getName());
+        }
+        if (request.getEmail() != null) {
+            user.setEmail(request.getEmail());
+        }
 
         userRepository.save(user);
 
