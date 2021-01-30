@@ -6,6 +6,7 @@ import com.gustavoaos.singledigit.domain.User;
 import com.gustavoaos.singledigit.domain.exception.NotFoundException;
 import com.gustavoaos.singledigit.domain.repository.UserRepository;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -80,6 +81,14 @@ class UpdateUserInteractorImplTest {
         assertThatThrownBy(() -> sut.execute(invalidUuid, updatedUser))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Invalid UUID string: " + invalidUuid);
+    }
+
+    @Test
+    @Description("Should throw an IllegalArgumentException when request is null")
+    void shouldThrowAnIllegalArgumentExceptionWhenRequestIsNull() {
+        AssertionsForClassTypes.assertThatThrownBy(() -> sut.execute(uuid.toString(), null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Missing argument of type UpdateUserRequest");
     }
 
 }

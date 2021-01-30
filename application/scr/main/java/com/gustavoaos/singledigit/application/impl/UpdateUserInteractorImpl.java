@@ -27,6 +27,9 @@ public class UpdateUserInteractorImpl implements UpdateUserInteractor {
                 .findById(UUID.fromString(id))
                 .orElseThrow(() -> new NotFoundException("user", id));
 
+        if (request == null) {
+            throw new IllegalArgumentException("Missing argument of type UpdateUserRequest");
+        }
         if (request.getName() != null) {
             user.setName(request.getName());
         }
