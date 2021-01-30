@@ -73,8 +73,12 @@ public class UserController {
     public @ResponseBody ResponseEntity<UserResponse> update(
             @PathVariable("id") String id,
             @RequestBody UpdateUserRequest request) {
-        UserResponse user = this.updateUserInteractor.execute(id, request);
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+        try {
+            UserResponse user = this.updateUserInteractor.execute(id, request);
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+        } catch (NotFoundException err) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, err.getMessage());
+        }
     }
 
 }

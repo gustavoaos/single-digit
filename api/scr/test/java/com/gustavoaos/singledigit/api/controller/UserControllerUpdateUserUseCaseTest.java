@@ -7,6 +7,7 @@ import com.gustavoaos.singledigit.application.FindUserInteractor;
 import com.gustavoaos.singledigit.application.UpdateUserInteractor;
 import com.gustavoaos.singledigit.application.request.UpdateUserRequest;
 import com.gustavoaos.singledigit.application.response.UserResponse;
+import com.gustavoaos.singledigit.domain.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -49,6 +50,8 @@ class UserControllerUpdateUserUseCaseTest {
 
     private String mockUserUUID;
     private UserResponse mockUser;
+    private UserResponse updatedUser;
+    private UpdateUserRequest request;
 
     @BeforeEach
     void initEach() {
@@ -60,6 +63,51 @@ class UserControllerUpdateUserUseCaseTest {
                 .email("valid@mail.com")
                 .singleDigits(Collections.emptyList())
                 .build();
+        updatedUser = UserResponse
+                .builder()
+                .id(mockUserUUID)
+                .name("Updated name")
+                .email("updated@mail.com")
+                .singleDigits(Collections.emptyList())
+                .build();
+        request = UpdateUserRequest
+                .builder()
+                .name("Updated name")
+                .email("updated@mail.com")
+                .build();
+    }
+
+    @Test
+    @Description("Should return 200 http status and user when valid id is provided")
+    void shouldReturn200AndUserWhenValidIdIsProvided() throws Exception {
+        Mockito.when(updateUserInteractor.execute(
+                mockUser.getId(), request)
+        ).thenReturn(updatedUser);
+
+        mockMvc.perform(put("/users/" + mockUserUUID)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(request)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(updatedUser.getId())))
+                .andExpect(jsonPath("$.name", is(updatedUser.getName())))
+                .andExpect(jsonPath("$.email", is(updatedUser.getEmail())))
+                .andExpect(jsonPath("$.singleDigits", hasSize(0)));
+    }
+
+    @Test
+    @Description("Should return 404 http status when user not found")
+    void shouldReturn404WhenUserNotFound() throws Exception {
+        Mockito.when(updateUserInteractor.execute(
+                mockUserUUID, request)
+        ).thenThrow(new NotFoundException("resource", mockUserUUID));
+
+        mockMvc.perform(put("/users/" + mockUserUUID)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(request)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isNotFound())
+                .andExpect(status().reason("Resource not found"));
     }
 
 }
