@@ -33,7 +33,6 @@ class UpdateUserInteractorImplTest {
     private String updatedName;
     private String updatedEmail;
     private UpdateUserRequest updatedUser;
-    private User user;
 
     @BeforeEach
     void setMockOutput() {
@@ -43,7 +42,7 @@ class UpdateUserInteractorImplTest {
         updatedName = "Updated Name";
         updatedEmail = "updated@mail.com";
 
-        user = User.builder().uuid(uuid).name(name).email(email).build();
+        User user = User.builder().uuid(uuid).name(name).email(email).build();
         updatedUser = UpdateUserRequest.builder().name(updatedName).email(updatedEmail).build();
 
         when(userRepository.findById(uuid)).thenReturn(Optional.of(user));
@@ -71,6 +70,16 @@ class UpdateUserInteractorImplTest {
         assertThatThrownBy(() -> sut.execute(invalidId, updatedUser))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("Resource not found");
+    }
+
+    @Test
+    @Description("Should throw an IllegalArgumentException when invalid UUID is provided")
+    void shouldThrowAnIllegalArgumentExceptionWhenInValidUuidIsProvided() {
+        String invalidUuid = "123L";
+
+        assertThatThrownBy(() -> sut.execute(invalidUuid, updatedUser))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Invalid UUID string: " + invalidUuid);
     }
 
 }
