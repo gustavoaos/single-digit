@@ -5,6 +5,7 @@ import com.gustavoaos.singledigit.application.*;
 import com.gustavoaos.singledigit.application.request.ComputeSingleDigitRequest;
 import com.gustavoaos.singledigit.application.request.UpdateUserRequest;
 import com.gustavoaos.singledigit.application.response.UserResponse;
+import com.gustavoaos.singledigit.domain.exception.ParameterOutOfRangeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -112,6 +113,22 @@ class UserControllerComputeSingleDigitUseCaseTest {
     @Description("Should return 400 http status when k is not provided")
     void shouldReturn400WhenKIsNotProvided() throws Exception {
         ComputeSingleDigitRequest request = ComputeSingleDigitRequest.builder().n("9875").build();
+
+        mockMvc.perform(get("/users/compute")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(request)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @Description("Should return 400 http status when n is out of bound limits")
+    void shouldReturn400WhenNIsOutOfBoundLimits() throws Exception {
+        ComputeSingleDigitRequest request = ComputeSingleDigitRequest.builder().n("-1").k("4").build();
+
+        Mockito.when(computeSingleDigitInteractor.execute(
+                Mockito.any()
+        )).thenThrow(new ParameterOutOfRangeException("n", "1", "10^100000"));
 
         mockMvc.perform(get("/users/compute")
                 .contentType("application/json")

@@ -6,6 +6,7 @@ import com.gustavoaos.singledigit.application.request.ComputeSingleDigitRequest;
 import com.gustavoaos.singledigit.application.request.UpdateUserRequest;
 import com.gustavoaos.singledigit.application.response.UserResponse;
 import com.gustavoaos.singledigit.domain.exception.NotFoundException;
+import com.gustavoaos.singledigit.domain.exception.ParameterOutOfRangeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -90,12 +91,16 @@ public class UserController {
     public @ResponseBody ResponseEntity<Integer> compute(
             @RequestParam(name = "id", required = false) String id,
             @RequestBody ComputeSingleDigitRequest request) {
-        if (request.getN() == null || request.getK() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing argument");
+        try {
+            if (request.getN() == null || request.getK() == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing argument");
+            }
+
+            Integer res = this.computeSingleDigitInteractor.execute(request);
+            return ResponseEntity.status(HttpStatus.OK).body(res);
+        } catch (ParameterOutOfRangeException err) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, err.getMessage());
         }
-        
-        Integer res = this.computeSingleDigitInteractor.execute(request);
-        return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
 }
