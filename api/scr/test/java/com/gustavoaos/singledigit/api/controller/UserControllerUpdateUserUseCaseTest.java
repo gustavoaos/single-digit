@@ -110,4 +110,13 @@ class UserControllerUpdateUserUseCaseTest {
                 .andExpect(status().reason("Resource not found"));
     }
 
+    @Test
+    @Description("Should return 400 if no name and email are provided")
+    void shouldReturn400IfNoNameAndEmailAreProvided() throws Exception {
+        mockMvc.perform(put("/users/" + mockUserUUID)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(null)))
+                .andExpect(status().isBadRequest());
+    }
+
 }

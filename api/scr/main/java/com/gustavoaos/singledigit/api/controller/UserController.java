@@ -74,6 +74,9 @@ public class UserController {
             @PathVariable("id") String id,
             @RequestBody UpdateUserRequest request) {
         try {
+            if (request.getEmail() == null && request.getName()  == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing argument");
+            }
             UserResponse user = this.updateUserInteractor.execute(id, request);
             return ResponseEntity.status(HttpStatus.OK).body(user);
         } catch (NotFoundException err) {
