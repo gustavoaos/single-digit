@@ -107,4 +107,17 @@ class UserControllerComputeSingleDigitUseCaseTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    @Description("Should return 400 http status when k is not provided")
+    void shouldReturn400WhenKIsNotProvided() throws Exception {
+        ComputeSingleDigitRequest request = ComputeSingleDigitRequest.builder().n("9875").build();
+
+        mockMvc.perform(get("/users/compute")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(request)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isBadRequest());
+    }
+
 }
