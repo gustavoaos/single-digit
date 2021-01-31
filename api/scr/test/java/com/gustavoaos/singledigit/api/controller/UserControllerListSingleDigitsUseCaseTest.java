@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = UserController.class)
-public class UserControllerListSingleDigitsUseCaseTest {
+class UserControllerListSingleDigitsUseCaseTest {
 
     @Autowired
     private MockMvc mockMvc;

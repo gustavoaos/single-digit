@@ -9,8 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigInteger;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 class SingleDigitTest {
@@ -99,7 +98,7 @@ class SingleDigitTest {
     @Disabled("Slow test: tests N upper bound limit")
     @DisplayName("Should throws Parameter Out Of Range Exception if n is greater than maximum value")
     void shouldThrowsParameterOutOfRangeExceptionIfNIsGreaterThanMaximumValue() {
-        BigInteger max = BigInteger.valueOf(10).pow(10^1000000);
+        BigInteger max = BigInteger.valueOf(10).pow(10^1_000_000);
         String n = max.add(BigInteger.ONE).toString();
         k = "1";
 
@@ -118,6 +117,17 @@ class SingleDigitTest {
         assertThatThrownBy(() -> new SingleDigit(n, k))
                 .isInstanceOf(ArgumentOutOfRangeException.class)
                 .hasMessage(kArgumentOutOfRangeExceptionMessage);
+    }
+
+    @Test
+    @Disabled("Slow test: tests computes single digit when N and K are the maximum value")
+    @DisplayName("Should computes single digit when n and k are really big numbers")
+    void shouldComputesSingleDigitWhenNAndKAreReallyBigNumbers() {
+        String n = BigInteger.valueOf(10).pow(10^1_000_000).toString();
+        String k = BigInteger.valueOf(10).pow(5).toString();
+
+        assertThatNoException().isThrownBy(() -> new SingleDigit(n, k));
+        assertThat(new SingleDigit(n, k).getResult()).isEqualTo(1);
     }
 
     @Test
@@ -164,4 +174,5 @@ class SingleDigitTest {
 
         assertThat(stu.getResult()).isEqualTo(expected);
     }
+
 }

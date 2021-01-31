@@ -5,12 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
-import java.io.Serializable;
 import java.math.BigInteger;
 
 @Embeddable
 @NoArgsConstructor
-public class SingleDigit implements Serializable {
+public class SingleDigit {
 
     private static final BigInteger MINIMUM_VALUE = BigInteger.ONE;
     private static final BigInteger MAXIMUM_VALUE_N = BigInteger.valueOf(10).pow(10^1_000_000);
@@ -32,13 +31,7 @@ public class SingleDigit implements Serializable {
         BigInteger nBigInt = new BigInteger(n);
         BigInteger kBigInt = new BigInteger(k);
 
-        boolean nLower = isLowerThanMinimumValue(nBigInt);
-        boolean nGreater = this.isGreaterThanMaximumValue(nBigInt, MAXIMUM_VALUE_N);
-
-//        if (isLowerThanMinimumValue(nBigInt) || this.isGreaterThanMaximumValue(nBigInt, MAXIMUM_VALUE_N)) {
-//            throw new ArgumentOutOfRangeException("n", "1", "10ˆ1000000");
-//        }
-        if (nLower || nGreater) {
+        if (isLowerThanMinimumValue(nBigInt) || this.isGreaterThanMaximumValue(nBigInt, MAXIMUM_VALUE_N)) {
             throw new ArgumentOutOfRangeException("n", "1", "10ˆ1000000");
         }
         if (isLowerThanMinimumValue(kBigInt) || this.isGreaterThanMaximumValue(kBigInt, MAXIMUM_VALUE_K)) {
