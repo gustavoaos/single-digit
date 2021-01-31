@@ -12,8 +12,8 @@ import java.math.BigInteger;
 @NoArgsConstructor
 public class SingleDigit implements Serializable {
 
-    private static final Integer MINIMUM_VALUE = 1;
-    private static final BigInteger MAXIMUM_VALUE_N = BigInteger.valueOf(10).pow(10^1000000);
+    private static final BigInteger MINIMUM_VALUE = BigInteger.ONE;
+    private static final BigInteger MAXIMUM_VALUE_N = BigInteger.valueOf(10).pow(10^1_000_000);
     private static final BigInteger MAXIMUM_VALUE_K = BigInteger.valueOf(10).pow(5);
 
     @Getter private String n;
@@ -21,7 +21,7 @@ public class SingleDigit implements Serializable {
     @Getter private int result;
 
     private boolean isLowerThanMinimumValue(BigInteger value) {
-        return value.intValue() < MINIMUM_VALUE;
+        return value.compareTo(MINIMUM_VALUE) < 0;
     }
 
     private boolean isGreaterThanMaximumValue(BigInteger value, BigInteger upperBound) {
@@ -32,7 +32,13 @@ public class SingleDigit implements Serializable {
         BigInteger nBigInt = new BigInteger(n);
         BigInteger kBigInt = new BigInteger(k);
 
-        if (isLowerThanMinimumValue(nBigInt) || this.isGreaterThanMaximumValue(nBigInt, MAXIMUM_VALUE_N)) {
+        boolean nLower = isLowerThanMinimumValue(nBigInt);
+        boolean nGreater = this.isGreaterThanMaximumValue(nBigInt, MAXIMUM_VALUE_N);
+
+//        if (isLowerThanMinimumValue(nBigInt) || this.isGreaterThanMaximumValue(nBigInt, MAXIMUM_VALUE_N)) {
+//            throw new ArgumentOutOfRangeException("n", "1", "10ˆ1000000");
+//        }
+        if (nLower || nGreater) {
             throw new ArgumentOutOfRangeException("n", "1", "10ˆ1000000");
         }
         if (isLowerThanMinimumValue(kBigInt) || this.isGreaterThanMaximumValue(kBigInt, MAXIMUM_VALUE_K)) {
