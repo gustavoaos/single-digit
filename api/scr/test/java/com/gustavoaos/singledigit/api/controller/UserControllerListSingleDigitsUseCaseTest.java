@@ -2,7 +2,9 @@ package com.gustavoaos.singledigit.api.controller;
 
 import com.gustavoaos.singledigit.application.*;
 import com.gustavoaos.singledigit.application.request.UpdateUserRequest;
+import com.gustavoaos.singledigit.application.response.SingleDigitListResponse;
 import com.gustavoaos.singledigit.application.response.UserResponse;
+import com.gustavoaos.singledigit.domain.SingleDigit;
 import com.gustavoaos.singledigit.domain.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,11 +16,14 @@ import org.springframework.context.annotation.Description;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
 
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = UserController.class)
@@ -46,17 +51,17 @@ public class UserControllerListSingleDigitsUseCaseTest {
     private ListSingleDigitsInteractor listSingleDigitsInteractor;
 
     private String mockUserUUID;
-    private UserResponse mockUser;
+    private SingleDigitListResponse mockList;
 
     @BeforeEach
     void initEach() {
         mockUserUUID = UUID.randomUUID().toString();
-        mockUser = UserResponse
+        mockList = SingleDigitListResponse
                 .builder()
-                .id(mockUserUUID)
-                .name("Valid Name")
-                .email("valid@mail.com")
-                .singleDigits(Collections.emptyList())
+                .singleDigits(Arrays.asList(
+                        new SingleDigit("9875", "4"),
+                        new SingleDigit("123", "2")
+                ))
                 .build();
     }
 
@@ -73,4 +78,19 @@ public class UserControllerListSingleDigitsUseCaseTest {
                 .andExpect(status().isNotFound())
                 .andExpect(status().reason("Resource not found"));
     }
+
+    @Test
+    @Description("Should return list with previous single digits computed for user when valid id is provided")
+    void shouldReturnListWithPreviousSingleDigitsComputedForUserWhenValidIdIsProvided() throws Exception {
+        Mockito.when(listSingleDigitsInteractor.execute(
+                mockUserUUID)
+        ).thenReturn(mockList);
+
+        mockMvc.perform(get("/users/" + mockUserUUID + "/list")
+                .contentType("application/json"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.singleDigits", hasSize(2)));
+    }
+
 }
