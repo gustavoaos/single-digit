@@ -48,6 +48,9 @@ class UserControllerUpdateUserUseCaseTest {
     @MockBean
     private ComputeSingleDigitInteractor computeSingleDigitInteractor;
 
+    @MockBean
+    private ListSingleDigitsInteractor listSingleDigitsInteractor;
+
     private String mockUserUUID;
     private UserResponse mockUser;
     private UserResponse updatedUser;

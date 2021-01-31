@@ -46,6 +46,9 @@ class UserControllerCreateUserUseCaseTest {
     @MockBean
     private ComputeSingleDigitInteractor computeSingleDigitInteractor;
 
+    @MockBean
+    private ListSingleDigitsInteractor listSingleDigitsInteractor;
+
     private UserResponse mockUser;
 
     @BeforeEach

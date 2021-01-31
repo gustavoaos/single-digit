@@ -4,6 +4,7 @@ import com.gustavoaos.singledigit.application.*;
 import com.gustavoaos.singledigit.application.request.CreateUserRequest;
 import com.gustavoaos.singledigit.application.request.ComputeSingleDigitRequest;
 import com.gustavoaos.singledigit.application.request.UpdateUserRequest;
+import com.gustavoaos.singledigit.application.response.SingleDigitListResponse;
 import com.gustavoaos.singledigit.application.response.UserResponse;
 import com.gustavoaos.singledigit.domain.exception.NotFoundException;
 import com.gustavoaos.singledigit.domain.exception.ArgumentOutOfRangeException;
@@ -22,6 +23,7 @@ public class UserController {
     private final DeleteUserInteractor deleteUserInteractor;
     private final UpdateUserInteractor updateUserInteractor;
     private final ComputeSingleDigitInteractor computeSingleDigitInteractor;
+    private final ListSingleDigitsInteractor listSingleDigitsInteractor;
 
     @Autowired
     public UserController(
@@ -29,13 +31,15 @@ public class UserController {
             FindUserInteractor findUserInteractor,
             DeleteUserInteractor deleteUserInteractor,
             UpdateUserInteractor updateUserInteractor,
-            ComputeSingleDigitInteractor computeSingleDigitInteractor
+            ComputeSingleDigitInteractor computeSingleDigitInteractor,
+            ListSingleDigitsInteractor listSingleDigitsInteractor
     ) {
         this.createUserInteractor = createUserInteractor;
         this.findUserInteractor = findUserInteractor;
         this.deleteUserInteractor = deleteUserInteractor;
         this.updateUserInteractor = updateUserInteractor;
         this.computeSingleDigitInteractor = computeSingleDigitInteractor;
+        this.listSingleDigitsInteractor = listSingleDigitsInteractor;
     }
 
     @PostMapping
@@ -107,6 +111,14 @@ public class UserController {
         } catch (ArgumentOutOfRangeException | NotFoundException err) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, err.getMessage());
         }
+    }
+
+    @GetMapping("/{id}/list")
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody ResponseEntity<SingleDigitListResponse> list(
+            @PathVariable("id") String id) {
+        SingleDigitListResponse list = this.listSingleDigitsInteractor.execute(id);
+        return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
 }

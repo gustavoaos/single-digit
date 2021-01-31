@@ -47,6 +47,9 @@ class UserControllerFindUserUseCaseTest {
     @MockBean
     private ComputeSingleDigitInteractor computeSingleDigitInteractor;
 
+    @MockBean
+    private ListSingleDigitsInteractor listSingleDigitsInteractor;
+
     private String mockUserUUID;
     private UserResponse mockUser;
 
