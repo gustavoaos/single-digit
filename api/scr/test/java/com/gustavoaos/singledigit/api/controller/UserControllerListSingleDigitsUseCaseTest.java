@@ -1,9 +1,7 @@
 package com.gustavoaos.singledigit.api.controller;
 
 import com.gustavoaos.singledigit.application.*;
-import com.gustavoaos.singledigit.application.request.UpdateUserRequest;
 import com.gustavoaos.singledigit.application.response.SingleDigitListResponse;
-import com.gustavoaos.singledigit.application.response.UserResponse;
 import com.gustavoaos.singledigit.domain.SingleDigit;
 import com.gustavoaos.singledigit.domain.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,12 +15,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.UUID;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
