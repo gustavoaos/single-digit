@@ -57,7 +57,7 @@ public class SingleDigit implements Serializable {
         BigInteger sum = mod.multiply(k);
 
         if (sum.compareTo(BigInteger.TEN) > 0) {
-            return singleDigitSum(sum, k);
+            return singleDigitSum(sum, BigInteger.valueOf(1));
         }
 
         return sum.intValue();

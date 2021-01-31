@@ -151,7 +151,7 @@ class SingleDigitTest {
     @DisplayName("Should compute single digit when mod times k is greater than 10")
     void shouldComputeSingleDigitWhenModTimesKIsGreaterThanTen() {
         SingleDigit stu = new SingleDigit("9881", "4");
-        int expected = 8;
+        int expected = 5;
 
         assertThat(stu.getResult()).isEqualTo(expected);
     }
