@@ -28,7 +28,7 @@ public class ComputeSingleDigitInteractorImpl implements ComputeSingleDigitInter
         }
 
         SingleDigit sd = request.toDomain();
-        return sd.compute();
+        return sd.getResult();
     }
 
     @Override
@@ -46,6 +46,6 @@ public class ComputeSingleDigitInteractorImpl implements ComputeSingleDigitInter
 
         userRepository.save(user);
 
-        return sd.compute();
+        return sd.getResult();
     }
 }

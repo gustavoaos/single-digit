@@ -126,7 +126,7 @@ class SingleDigitTest {
         SingleDigit stu = new SingleDigit("7", "1");
         int expected = 7;
 
-        assertThat(stu.compute()).isEqualTo(expected);
+        assertThat(stu.getResult()).isEqualTo(expected);
     }
 
     @Test
@@ -135,7 +135,7 @@ class SingleDigitTest {
         SingleDigit stu = new SingleDigit("16", "1");
         int expected = 7;
 
-        assertThat(stu.compute()).isEqualTo(expected);
+        assertThat(stu.getResult()).isEqualTo(expected);
     }
 
     @Test
@@ -144,7 +144,7 @@ class SingleDigitTest {
         SingleDigit stu = new SingleDigit("9875", "4");
         int expected = 8;
 
-        assertThat(stu.compute()).isEqualTo(expected);
+        assertThat(stu.getResult()).isEqualTo(expected);
     }
 
     @Test
@@ -153,7 +153,7 @@ class SingleDigitTest {
         SingleDigit stu = new SingleDigit("9881", "4");
         int expected = 8;
 
-        assertThat(stu.compute()).isEqualTo(expected);
+        assertThat(stu.getResult()).isEqualTo(expected);
     }
 
     @Test
@@ -162,6 +162,6 @@ class SingleDigitTest {
         SingleDigit stu = new SingleDigit("9", "1");
         int expected = 9;
 
-        assertThat(stu.compute()).isEqualTo(expected);
+        assertThat(stu.getResult()).isEqualTo(expected);
     }
 }

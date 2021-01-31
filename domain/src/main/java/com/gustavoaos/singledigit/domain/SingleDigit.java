@@ -18,6 +18,7 @@ public class SingleDigit implements Serializable {
 
     @Getter private String n;
     @Getter private String k;
+    @Getter private int result;
 
     private boolean isLowerThanMinimumValue(BigInteger value) {
         return value.intValue() < MINIMUM_VALUE;
@@ -40,9 +41,10 @@ public class SingleDigit implements Serializable {
 
         this.n = n;
         this.k = k;
+        this.result = this.compute();
     }
 
-    public int compute() {
+    private int compute() {
         BigInteger bigN = new BigInteger(this.n);
         BigInteger bigK = new BigInteger(this.k);
 
