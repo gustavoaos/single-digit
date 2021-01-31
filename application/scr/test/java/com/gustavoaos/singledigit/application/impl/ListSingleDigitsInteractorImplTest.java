@@ -62,4 +62,16 @@ class ListSingleDigitsInteractorImplTest {
         assertThat(sut.execute(uuid.toString()).getSingleDigits().size()).isEqualTo(2);
     }
 
+    @Test
+    @Description("Should throw a NotFoundException when invalid id is provided")
+    void shouldThrowANotFoundExceptionWhenInValidIdIsProvided() {
+        String invalidId = uuid.toString();
+
+        when(userRepository.findById(uuid)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> sut.execute(invalidId))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("Resource not found");
+    }
+
 }
