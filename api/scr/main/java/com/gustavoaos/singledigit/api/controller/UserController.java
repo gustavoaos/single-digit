@@ -117,8 +117,12 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody ResponseEntity<SingleDigitListResponse> list(
             @PathVariable("id") String id) {
-        SingleDigitListResponse list = this.listSingleDigitsInteractor.execute(id);
-        return ResponseEntity.status(HttpStatus.OK).body(list);
+        try {
+            SingleDigitListResponse list = this.listSingleDigitsInteractor.execute(id);
+            return ResponseEntity.status(HttpStatus.OK).body(list);
+        } catch (NotFoundException err) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, err.getMessage());
+        }
     }
 
 }
