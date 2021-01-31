@@ -30,4 +30,5 @@ public class User {
     @Builder.Default
     @ElementCollection
     private List<SingleDigit> singleDigits = new ArrayList<>();
+
 }
