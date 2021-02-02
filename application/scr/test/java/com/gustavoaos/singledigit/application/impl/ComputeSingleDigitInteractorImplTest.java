@@ -11,8 +11,8 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Description;
 
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,6 +25,9 @@ class ComputeSingleDigitInteractorImplTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private Map<ComputeSingleDigitRequest, Integer> cache;
 
     @InjectMocks
     private ComputeSingleDigitInteractorImpl sut;
@@ -79,6 +82,21 @@ class ComputeSingleDigitInteractorImplTest {
 
         verify(userRepository, times(1)).findById(uuid);
         verify(userRepository, times(1)).save(any());
+    }
+
+    @Test
+    @Description("Should get single digit from cache when already computed")
+    void shouldGetSingleDigitFromCacheWhenAlreadyComputed() {
+        ComputeSingleDigitRequest request = ComputeSingleDigitRequest.builder().n("123").k("2").build();
+        Integer expected = 3;
+
+        when(cache.containsKey(request)).thenReturn(true);
+        when(cache.get(request)).thenReturn(expected);
+
+        assertThat(sut.execute(request)).isEqualTo(expected);
+
+        verify(cache, times(1)).containsKey(request);
+        verify(cache, times(1)).get(request);
     }
 
 }

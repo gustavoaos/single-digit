@@ -9,16 +9,21 @@ import com.gustavoaos.singledigit.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.UUID;
 
 @Component
 public class ComputeSingleDigitInteractorImpl implements ComputeSingleDigitInteractor {
 
     private final UserRepository userRepository;
+    private final Map<ComputeSingleDigitRequest, Integer> cache;
 
     @Autowired
-    public ComputeSingleDigitInteractorImpl(UserRepository userRepository) {
+    public ComputeSingleDigitInteractorImpl(
+            UserRepository userRepository,
+            Map<ComputeSingleDigitRequest, Integer> cache) {
         this.userRepository = userRepository;
+        this.cache = cache;
     }
 
     @Override
@@ -27,7 +32,7 @@ public class ComputeSingleDigitInteractorImpl implements ComputeSingleDigitInter
             throw new IllegalArgumentException("Missing argument of type ComputeSingleDigitRequest");
         }
 
-        SingleDigit sd = request.toDomain();
+        SingleDigit sd = this.get(request);
         return sd.getResult();
     }
 
@@ -41,11 +46,22 @@ public class ComputeSingleDigitInteractorImpl implements ComputeSingleDigitInter
                 .findById(UUID.fromString(id))
                 .orElseThrow(() -> new NotFoundException("user", id));
 
-        SingleDigit sd = request.toDomain();
-        user.getSingleDigits().add(sd);
+        SingleDigit sd = this.get(request);
 
+        user.getSingleDigits().add(sd);
         userRepository.save(user);
 
         return sd.getResult();
+    }
+
+    private SingleDigit get(ComputeSingleDigitRequest request) {
+        if (cache.containsKey(request)) {
+            return request.toDomain(cache.get(request));
+        }
+
+        SingleDigit sd = request.toDomain();
+        cache.put(request, sd.getResult());
+
+        return sd;
     }
 }

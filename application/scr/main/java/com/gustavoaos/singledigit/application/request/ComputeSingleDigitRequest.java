@@ -17,4 +17,8 @@ public class ComputeSingleDigitRequest {
         return new SingleDigit(n, k);
     }
 
+    public SingleDigit toDomain(Integer result) {
+        return new SingleDigit(n, k, result);
+    }
+
 }
