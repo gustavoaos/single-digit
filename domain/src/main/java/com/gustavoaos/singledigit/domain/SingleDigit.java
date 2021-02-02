@@ -28,19 +28,31 @@ public class SingleDigit {
     }
 
     public SingleDigit(String n, String k) {
-        BigInteger nBigInt = new BigInteger(n);
-        BigInteger kBigInt = new BigInteger(k);
-
-        if (isLowerThanMinimumValue(nBigInt) || this.isGreaterThanMaximumValue(nBigInt, MAXIMUM_VALUE_N)) {
-            throw new ArgumentOutOfRangeException("n", "1", "10ˆ1000000");
-        }
-        if (isLowerThanMinimumValue(kBigInt) || this.isGreaterThanMaximumValue(kBigInt, MAXIMUM_VALUE_K)) {
-            throw new ArgumentOutOfRangeException("k", "1", "10ˆ5");
-        }
+        validateConstrains(n, k);
 
         this.n = n;
         this.k = k;
         this.result = this.compute();
+    }
+
+    public SingleDigit(String n, String k, Integer result) {
+        validateConstrains(n, k);
+
+        this.n = n;
+        this.k = k;
+        this.result = result;
+    }
+
+    private void validateConstrains(String n, String k) {
+        BigInteger bigN = new BigInteger(n);
+        BigInteger bigK = new BigInteger(k);
+
+        if (isLowerThanMinimumValue(bigN) || this.isGreaterThanMaximumValue(bigN, MAXIMUM_VALUE_N)) {
+            throw new ArgumentOutOfRangeException("n", "1", "10ˆ1000000");
+        }
+        if (isLowerThanMinimumValue(bigK) || this.isGreaterThanMaximumValue(bigK, MAXIMUM_VALUE_K)) {
+            throw new ArgumentOutOfRangeException("k", "1", "10ˆ5");
+        }
     }
 
     private int compute() {
