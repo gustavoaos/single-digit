@@ -1,8 +1,11 @@
 package com.gustavoaos.singledigit.infrastructure.cache;
 
+import lombok.EqualsAndHashCode;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+@EqualsAndHashCode(callSuper = true)
 public class LRUCache<K, V> extends LinkedHashMap<K, V> {
 
     private static final int INITIAL_CAPACITY = 16;
