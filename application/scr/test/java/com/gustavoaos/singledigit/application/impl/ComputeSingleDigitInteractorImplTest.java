@@ -99,4 +99,19 @@ class ComputeSingleDigitInteractorImplTest {
         verify(cacheRepository, times(1)).putOnCache(request, expected);
     }
 
+    @Test
+    @Description("Should get single digit from cache when already computed")
+    void shouldGetSingleDigitFromCacheWhenAlreadyComputed() {
+        ComputeSingleDigitRequest request = ComputeSingleDigitRequest.builder().n("123").k("2").build();
+        SingleDigit sd = request.toDomain(new ComputeStrategy());
+        Integer expected = 3;
+
+        when(cacheRepository.getFromCache(any())).thenReturn(Optional.of(sd));
+
+        assertThat(sut.execute(request)).isEqualTo(expected);
+
+        verify(cacheRepository, times(1)).getFromCache(request);
+        verify(cacheRepository, times(0)).putOnCache(request, expected);
+    }
+
 }
