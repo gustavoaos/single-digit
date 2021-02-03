@@ -6,6 +6,7 @@ import com.gustavoaos.singledigit.domain.SingleDigit;
 import com.gustavoaos.singledigit.domain.User;
 import com.gustavoaos.singledigit.domain.exception.NotFoundException;
 import com.gustavoaos.singledigit.domain.repository.UserRepository;
+import com.gustavoaos.singledigit.domain.strategy.SingleDigitStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -32,6 +33,7 @@ class ListSingleDigitsInteractorImplTest {
     private String name;
     private String email;
     private List<SingleDigit> mockList;
+    private SingleDigitStrategy strategy;
 
     @BeforeEach
     void initEach() {
@@ -39,8 +41,8 @@ class ListSingleDigitsInteractorImplTest {
         name = "Joe Doe";
         email = "joe@doe.com";
         mockList = Arrays.asList(
-                new SingleDigit("9875", "4"),
-                new SingleDigit("123", "2"));
+                new SingleDigit("9875", "4", strategy),
+                new SingleDigit("123", "2", strategy));
         User user = User
                 .builder()
                 .uuid(uuid)

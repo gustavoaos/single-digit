@@ -1,10 +1,13 @@
 package com.gustavoaos.singledigit.domain;
 
 import com.gustavoaos.singledigit.domain.exception.ArgumentOutOfRangeException;
+import com.gustavoaos.singledigit.domain.strategy.ComputeStrategy;
+import com.gustavoaos.singledigit.domain.strategy.SingleDigitStrategy;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 import java.math.BigInteger;
 
 @Embeddable
@@ -19,6 +22,9 @@ public class SingleDigit {
     @Getter private String k;
     @Getter private int result;
 
+    @Transient
+    private SingleDigitStrategy strategy;
+
     private boolean isLowerThanMinimumValue(BigInteger value) {
         return value.compareTo(MINIMUM_VALUE) < 0;
     }
@@ -27,20 +33,22 @@ public class SingleDigit {
         return value.compareTo(upperBound) > 0;
     }
 
-    public SingleDigit(String n, String k) {
+//    public SingleDigit(String n, String k) {
+//        validateConstrains(n, k);
+//
+//        this.n = n;
+//        this.k = k;
+//        this.strategy = new ComputeStrategy();
+//        this.result = this.strategy.compute(n, k);
+//    }
+
+    public SingleDigit(String n, String k, SingleDigitStrategy strategy) {
         validateConstrains(n, k);
 
         this.n = n;
         this.k = k;
-        this.result = this.compute();
-    }
-
-    public SingleDigit(String n, String k, Integer result) {
-        validateConstrains(n, k);
-
-        this.n = n;
-        this.k = k;
-        this.result = result;
+        this.strategy = strategy;
+        this.result = this.strategy.compute(n, k);
     }
 
     private void validateConstrains(String n, String k) {
@@ -53,24 +61,5 @@ public class SingleDigit {
         if (isLowerThanMinimumValue(bigK) || this.isGreaterThanMaximumValue(bigK, MAXIMUM_VALUE_K)) {
             throw new ArgumentOutOfRangeException("k", "1", "10ˆ5");
         }
-    }
-
-    private int compute() {
-        BigInteger bigN = new BigInteger(this.n);
-        BigInteger bigK = new BigInteger(this.k);
-
-        return singleDigitSum(bigN, bigK);
-    }
-
-    private int singleDigitSum(BigInteger n, BigInteger k) {
-        BigInteger bigNine = BigInteger.valueOf(9);
-        BigInteger mod = n.mod(bigNine).compareTo(BigInteger.ZERO) == 0 ? bigNine : n.mod(bigNine);
-        BigInteger sum = mod.multiply(k);
-
-        if (sum.compareTo(BigInteger.TEN) > 0) {
-            return singleDigitSum(sum, BigInteger.valueOf(1));
-        }
-
-        return sum.intValue();
     }
 }

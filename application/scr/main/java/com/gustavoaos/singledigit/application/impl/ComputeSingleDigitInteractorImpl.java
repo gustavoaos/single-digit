@@ -5,25 +5,26 @@ import com.gustavoaos.singledigit.application.request.ComputeSingleDigitRequest;
 import com.gustavoaos.singledigit.domain.SingleDigit;
 import com.gustavoaos.singledigit.domain.User;
 import com.gustavoaos.singledigit.domain.exception.NotFoundException;
+import com.gustavoaos.singledigit.domain.repository.CacheRepository;
 import com.gustavoaos.singledigit.domain.repository.UserRepository;
+import com.gustavoaos.singledigit.domain.strategy.ComputeStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
 import java.util.UUID;
 
 @Component
 public class ComputeSingleDigitInteractorImpl implements ComputeSingleDigitInteractor {
 
     private final UserRepository userRepository;
-    private final Map<ComputeSingleDigitRequest, Integer> cache;
+    private final CacheRepository cacheRepository;
 
     @Autowired
     public ComputeSingleDigitInteractorImpl(
             UserRepository userRepository,
-            Map<ComputeSingleDigitRequest, Integer> cache) {
+            CacheRepository cacheRepository) {
         this.userRepository = userRepository;
-        this.cache = cache;
+        this.cacheRepository = cacheRepository;
     }
 
     @Override
@@ -32,7 +33,7 @@ public class ComputeSingleDigitInteractorImpl implements ComputeSingleDigitInter
             throw new IllegalArgumentException("Missing argument of type ComputeSingleDigitRequest");
         }
 
-        SingleDigit sd = this.get(request);
+        SingleDigit sd = this.getFromCache(request);
         return sd.getResult();
     }
 
@@ -46,7 +47,7 @@ public class ComputeSingleDigitInteractorImpl implements ComputeSingleDigitInter
                 .findById(UUID.fromString(id))
                 .orElseThrow(() -> new NotFoundException("user", id));
 
-        SingleDigit sd = this.get(request);
+        SingleDigit sd = this.getFromCache(request);
 
         user.getSingleDigits().add(sd);
         userRepository.save(user);
@@ -54,14 +55,19 @@ public class ComputeSingleDigitInteractorImpl implements ComputeSingleDigitInter
         return sd.getResult();
     }
 
-    private SingleDigit get(ComputeSingleDigitRequest request) {
-        if (cache.containsKey(request)) {
-            return request.toDomain(cache.get(request));
-        }
+    private SingleDigit getFromCache(ComputeSingleDigitRequest key) {
+        return this.cacheRepository
+                .getFromCache(key)
+                .orElseGet(() -> createAndPutOnCache(key));
+    }
 
-        SingleDigit sd = request.toDomain();
-        cache.put(request, sd.getResult());
+    private SingleDigit createAndPutOnCache(ComputeSingleDigitRequest key) {
+        ComputeStrategy computeStr = new ComputeStrategy();
+        SingleDigit sd = new SingleDigit(key.getN(), key.getK(), computeStr);
+
+        this.cacheRepository.putOnCache(key, sd.getResult());
 
         return sd;
     }
+
 }

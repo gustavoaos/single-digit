@@ -3,7 +3,11 @@ package com.gustavoaos.singledigit.application.impl;
 import com.gustavoaos.singledigit.application.request.ComputeSingleDigitRequest;
 import com.gustavoaos.singledigit.domain.SingleDigit;
 import com.gustavoaos.singledigit.domain.User;
+import com.gustavoaos.singledigit.domain.repository.CacheRepository;
 import com.gustavoaos.singledigit.domain.repository.UserRepository;
+import com.gustavoaos.singledigit.domain.strategy.CacheStrategy;
+import com.gustavoaos.singledigit.domain.strategy.ComputeStrategy;
+import com.gustavoaos.singledigit.domain.strategy.SingleDigitStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -27,28 +31,24 @@ class ComputeSingleDigitInteractorImplTest {
     private UserRepository userRepository;
 
     @Mock
-    private Map<ComputeSingleDigitRequest, Integer> cache;
+    private CacheRepository cacheRepository;
 
     @InjectMocks
     private ComputeSingleDigitInteractorImpl sut;
 
     private UUID uuid;
-    private String name;
-    private String email;
-    private User user;
-    private User updatedUser;
-    private SingleDigit sd;
 
     @BeforeEach
     void setMockOutput() {
-        sd = new SingleDigit("9875", "4");
+        SingleDigitStrategy strategy = new ComputeStrategy();
+        SingleDigit sd = new SingleDigit("9875", "4", strategy);
         uuid = UUID.randomUUID();
-        name = "Joe Doe";
-        email = "joe@doe.com";
+        String name = "Joe Doe";
+        String email = "joe@doe.com";
 
-        user = User.builder()
+        User user = User.builder()
                 .uuid(uuid).name(name).email(email).build();
-        updatedUser = User.builder()
+        User updatedUser = User.builder()
                 .uuid(uuid).name(name).email(email).singleDigits(Collections.singletonList(sd)).build();
 
         when(userRepository.findById(uuid)).thenReturn(Optional.of(user));
@@ -82,36 +82,6 @@ class ComputeSingleDigitInteractorImplTest {
 
         verify(userRepository, times(1)).findById(uuid);
         verify(userRepository, times(1)).save(any());
-    }
-
-    @Test
-    @Description("Should get single digit from cache when already computed")
-    void shouldGetSingleDigitFromCacheWhenAlreadyComputed() {
-        ComputeSingleDigitRequest request = ComputeSingleDigitRequest.builder().n("123").k("2").build();
-        Integer expected = 3;
-
-        when(cache.containsKey(request)).thenReturn(true);
-        when(cache.get(request)).thenReturn(expected);
-
-        assertThat(sut.execute(request)).isEqualTo(expected);
-
-        verify(cache, times(1)).containsKey(request);
-        verify(cache, times(1)).get(request);
-    }
-
-    @Test
-    @Description("Should computes single digit and stores in cache when is not previous computed")
-    void shouldComputesSingleDigitAndStoresInCacheWhenIsNotPreviousComputed() {
-        ComputeSingleDigitRequest request = ComputeSingleDigitRequest.builder().n("123").k("2").build();
-        Integer expected = 3;
-
-        when(cache.containsKey(request)).thenReturn(false);
-
-        assertThat(sut.execute(request)).isEqualTo(expected);
-
-        verify(cache, times(1)).containsKey(request);
-        verify(cache, times(0)).get(request);
-        verify(cache, times(1)).put(request, expected);
     }
 
 }

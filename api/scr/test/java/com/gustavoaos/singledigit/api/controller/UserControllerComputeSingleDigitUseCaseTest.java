@@ -7,6 +7,8 @@ import com.gustavoaos.singledigit.application.response.UserResponse;
 import com.gustavoaos.singledigit.domain.SingleDigit;
 import com.gustavoaos.singledigit.domain.exception.NotFoundException;
 import com.gustavoaos.singledigit.domain.exception.ArgumentOutOfRangeException;
+import com.gustavoaos.singledigit.domain.strategy.ComputeStrategy;
+import com.gustavoaos.singledigit.domain.strategy.SingleDigitStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -58,7 +60,7 @@ class UserControllerComputeSingleDigitUseCaseTest {
 
     @BeforeEach
     void initEach() {
-        mockSd = new SingleDigit("9875", "4");
+        mockSd = new SingleDigit("9875", "4", new ComputeStrategy());
         mockUserUUID = UUID.randomUUID().toString();
         mockUser = UserResponse
                 .builder()

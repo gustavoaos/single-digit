@@ -5,6 +5,8 @@ import com.gustavoaos.singledigit.application.*;
 import com.gustavoaos.singledigit.application.response.UserResponse;
 import com.gustavoaos.singledigit.domain.SingleDigit;
 import com.gustavoaos.singledigit.domain.exception.NotFoundException;
+import com.gustavoaos.singledigit.domain.strategy.ComputeStrategy;
+import com.gustavoaos.singledigit.domain.strategy.SingleDigitStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -52,9 +54,11 @@ class UserControllerFindUserUseCaseTest {
 
     private String mockUserUUID;
     private UserResponse mockUser;
+    private SingleDigitStrategy strategy;
 
     @BeforeEach
     void initEach() {
+        strategy = new ComputeStrategy();
         mockUserUUID = UUID.randomUUID().toString();
         mockUser = UserResponse
                 .builder()
@@ -84,8 +88,8 @@ class UserControllerFindUserUseCaseTest {
     @Description("Should return 200 http status and user with single digits previous calculated when valid id is provided")
     void shouldReturn200AndUserWithSingleDigitsPreviousCalculatedWhenValidIdIsProvided() throws Exception {
         List<SingleDigit> sd = Arrays.asList(
-                new SingleDigit("1", "1"),
-                new SingleDigit("7894", "4"));
+                new SingleDigit("1", "1", strategy),
+                new SingleDigit("7894", "4", strategy));
         mockUser.setSingleDigits(sd);
         Mockito.when(findUserInteractor.execute(mockUserUUID)).thenReturn(mockUser);
 

@@ -4,6 +4,8 @@ import com.gustavoaos.singledigit.application.*;
 import com.gustavoaos.singledigit.application.response.SingleDigitListResponse;
 import com.gustavoaos.singledigit.domain.SingleDigit;
 import com.gustavoaos.singledigit.domain.exception.NotFoundException;
+import com.gustavoaos.singledigit.domain.strategy.ComputeStrategy;
+import com.gustavoaos.singledigit.domain.strategy.SingleDigitStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -48,15 +50,17 @@ class UserControllerListSingleDigitsUseCaseTest {
 
     private String mockUserUUID;
     private SingleDigitListResponse mockList;
+    private SingleDigitStrategy strategy;
 
     @BeforeEach
     void initEach() {
+        strategy = new ComputeStrategy();
         mockUserUUID = UUID.randomUUID().toString();
         mockList = SingleDigitListResponse
                 .builder()
                 .singleDigits(Arrays.asList(
-                        new SingleDigit("9875", "4"),
-                        new SingleDigit("123", "2")
+                        new SingleDigit("9875", "4", strategy),
+                        new SingleDigit("123", "2", strategy)
                 ))
                 .build();
     }
