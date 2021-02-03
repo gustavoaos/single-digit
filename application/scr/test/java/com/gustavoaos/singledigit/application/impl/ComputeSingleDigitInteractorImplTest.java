@@ -5,7 +5,6 @@ import com.gustavoaos.singledigit.domain.SingleDigit;
 import com.gustavoaos.singledigit.domain.User;
 import com.gustavoaos.singledigit.domain.repository.CacheRepository;
 import com.gustavoaos.singledigit.domain.repository.UserRepository;
-import com.gustavoaos.singledigit.domain.strategy.CacheStrategy;
 import com.gustavoaos.singledigit.domain.strategy.ComputeStrategy;
 import com.gustavoaos.singledigit.domain.strategy.SingleDigitStrategy;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Description;
 
 import java.util.Collections;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
