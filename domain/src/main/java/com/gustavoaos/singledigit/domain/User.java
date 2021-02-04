@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -24,11 +25,20 @@ public class User {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID uuid;
 
+    @Column(name = "name", columnDefinition = "LONGTEXT")
     private String name;
+
+    @Column(name = "email", columnDefinition = "LONGTEXT")
     private String email;
 
     @Builder.Default
     @ElementCollection
     private List<SingleDigit> singleDigits = new ArrayList<>();
+
+    @Column(name = "public_key", columnDefinition = "LONGTEXT")
+    private String publicKey;
+
+    @Column(name = "private_key", columnDefinition = "LONGTEXT")
+    private String privateKey;
 
 }
