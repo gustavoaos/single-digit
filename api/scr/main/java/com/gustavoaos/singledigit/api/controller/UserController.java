@@ -8,6 +8,7 @@ import com.gustavoaos.singledigit.application.response.SingleDigitListResponse;
 import com.gustavoaos.singledigit.application.response.UserResponse;
 import com.gustavoaos.singledigit.domain.exception.NotFoundException;
 import com.gustavoaos.singledigit.domain.exception.ArgumentOutOfRangeException;
+import com.gustavoaos.singledigit.domain.exception.WrongKeyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +46,7 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody ResponseEntity<UserResponse> create(@RequestBody CreateUserRequest request) {
-        if (request.getEmail() == null || request.getName()  == null) {
+        if (request.getEmail() == null || request.getName() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing argument");
         }
 
@@ -55,12 +56,23 @@ public class UserController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody ResponseEntity<UserResponse> find(@PathVariable("id") String id) {
+    public @ResponseBody ResponseEntity<UserResponse> find(
+            @RequestHeader(value = "public-key", required = false) String publicKey,
+            @PathVariable("id") String id) {
         try {
-            UserResponse user = this.findUserInteractor.execute(id);
+            UserResponse user;
+
+            if (publicKey == null) {
+                user = this.findUserInteractor.execute(id);
+            } else {
+                user = this.findUserInteractor.execute(id, publicKey);
+            }
+
             return ResponseEntity.status(HttpStatus.OK).body(user);
         } catch (NotFoundException err) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, err.getMessage());
+        } catch (WrongKeyException err) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, err.getMessage());
         }
     }
 

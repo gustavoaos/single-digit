@@ -22,4 +22,15 @@ public class CreateUserRequest {
                 .email(this.email)
                 .build();
     }
+
+    public User toDomain(String publicKey, String privateKey) {
+        return User.builder()
+                .uuid(UUID.randomUUID())
+                .name(this.name)
+                .email(this.email)
+                .publicKey(publicKey)
+                .privateKey(privateKey)
+                .build();
+    }
+
 }

@@ -18,6 +18,7 @@ public class UserResponse {
     private String id;
     private String name;
     private String email;
+    private String publicKey;
 
     @Builder.Default
     private List<SingleDigit> singleDigits = new ArrayList<>();
@@ -31,7 +32,9 @@ public class UserResponse {
                 .id(user.getUuid().toString())
                 .name(user.getName())
                 .email(user.getEmail())
+                .publicKey(user.getPublicKey())
                 .singleDigits(user.getSingleDigits())
                 .build();
     }
+
 }
