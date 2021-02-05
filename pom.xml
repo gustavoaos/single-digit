@@ -85,6 +85,11 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
+		<!-- bean validations -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
     </dependencies>
 
 	<build>
