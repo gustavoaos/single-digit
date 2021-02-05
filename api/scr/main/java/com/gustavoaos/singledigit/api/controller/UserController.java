@@ -6,7 +6,6 @@ import com.gustavoaos.singledigit.application.request.ComputeSingleDigitRequest;
 import com.gustavoaos.singledigit.application.request.UpdateUserRequest;
 import com.gustavoaos.singledigit.application.response.SingleDigitListResponse;
 import com.gustavoaos.singledigit.application.response.UserResponse;
-import com.gustavoaos.singledigit.domain.exception.ArgumentOutOfRangeException;
 import com.gustavoaos.singledigit.domain.exception.WrongKeyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -89,17 +88,13 @@ public class UserController {
     public @ResponseBody ResponseEntity<Integer> compute(
             @RequestParam(name = "id", required = false) String id,
             @Valid @RequestBody ComputeSingleDigitRequest request) {
-        try {
-            Integer sd;
-            if (id == null) {
-                sd  = this.computeSingleDigitInteractor.execute(request);
-            } else {
-                sd  = this.computeSingleDigitInteractor.execute(request, id);
-            }
-            return ResponseEntity.status(HttpStatus.OK).body(sd);
-        } catch (ArgumentOutOfRangeException err) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, err.getMessage());
+        Integer sd;
+        if (id == null) {
+            sd  = this.computeSingleDigitInteractor.execute(request);
+        } else {
+            sd  = this.computeSingleDigitInteractor.execute(request, id);
         }
+        return ResponseEntity.status(HttpStatus.OK).body(sd);
     }
 
     @GetMapping("/{id}/list")
