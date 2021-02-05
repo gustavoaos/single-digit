@@ -32,7 +32,6 @@ public class User {
     private String name;
 
     @NotBlank(message = "Email is mandatory")
-    @Email(message = "Invalid email provided")
     @Column(name = "email", columnDefinition = "LONGTEXT")
     private String email;
 
