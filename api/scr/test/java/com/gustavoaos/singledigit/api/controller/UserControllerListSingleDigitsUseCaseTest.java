@@ -52,11 +52,11 @@ class UserControllerListSingleDigitsUseCaseTest {
 
     private String mockUserUUID;
     private SingleDigitListResponse mockList;
-    private SingleDigitStrategy strategy;
+    private final String BASE_REQUEST_MAPPING = "/single-digit/api/v1/users";
 
     @BeforeEach
     void initEach() {
-        strategy = new ComputeStrategy();
+        SingleDigitStrategy strategy = new ComputeStrategy();
         mockUserUUID = UUID.randomUUID().toString();
         mockList = SingleDigitListResponse
                 .builder()
@@ -74,7 +74,7 @@ class UserControllerListSingleDigitsUseCaseTest {
                 mockUserUUID)
         ).thenThrow(new NotFoundException("resource", mockUserUUID));
 
-        MvcResult result = mockMvc.perform(get("/users/" + mockUserUUID + "/list")
+        MvcResult result = mockMvc.perform(get(BASE_REQUEST_MAPPING + "/" + mockUserUUID + "/list")
                 .contentType("application/json"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isNotFound())
@@ -90,7 +90,7 @@ class UserControllerListSingleDigitsUseCaseTest {
                 mockUserUUID)
         ).thenReturn(mockList);
 
-        mockMvc.perform(get("/users/" + mockUserUUID + "/list")
+        mockMvc.perform(get(BASE_REQUEST_MAPPING + "/" + mockUserUUID + "/list")
                 .contentType("application/json"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())

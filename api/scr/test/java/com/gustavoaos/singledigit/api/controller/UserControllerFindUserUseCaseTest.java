@@ -1,6 +1,5 @@
 package com.gustavoaos.singledigit.api.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gustavoaos.singledigit.application.*;
 import com.gustavoaos.singledigit.application.response.UserResponse;
 import com.gustavoaos.singledigit.domain.SingleDigit;
@@ -57,6 +56,7 @@ class UserControllerFindUserUseCaseTest {
     private String mockUserUUID;
     private UserResponse mockUser;
     private SingleDigitStrategy strategy;
+    private final String BASE_REQUEST_MAPPING = "/single-digit/api/v1/users";
 
     @BeforeEach
     void initEach() {
@@ -76,7 +76,7 @@ class UserControllerFindUserUseCaseTest {
     void shouldReturn200AndUserWhenValidIdIsProvided() throws Exception {
         Mockito.when(findUserInteractor.execute(mockUserUUID)).thenReturn(mockUser);
 
-        mockMvc.perform(get("/users/" + mockUserUUID)
+        mockMvc.perform(get(BASE_REQUEST_MAPPING + "/" + mockUserUUID)
                 .contentType("application/json"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
@@ -95,7 +95,7 @@ class UserControllerFindUserUseCaseTest {
         mockUser.setSingleDigits(sd);
         Mockito.when(findUserInteractor.execute(mockUserUUID)).thenReturn(mockUser);
 
-        mockMvc.perform(get("/users/" + mockUserUUID)
+        mockMvc.perform(get(BASE_REQUEST_MAPPING + "/" + mockUserUUID)
                 .contentType("application/json"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
@@ -111,7 +111,7 @@ class UserControllerFindUserUseCaseTest {
         Mockito.when(findUserInteractor.execute(mockUserUUID))
                 .thenThrow(new NotFoundException("resource", mockUserUUID));
 
-        MvcResult result = mockMvc.perform(get("/users/" + mockUserUUID)
+        MvcResult result = mockMvc.perform(get(BASE_REQUEST_MAPPING + "/" + mockUserUUID)
                 .contentType("application/json"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isNotFound())

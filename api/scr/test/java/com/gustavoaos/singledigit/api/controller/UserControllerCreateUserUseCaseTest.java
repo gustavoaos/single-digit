@@ -50,6 +50,7 @@ class UserControllerCreateUserUseCaseTest {
     private ListSingleDigitsInteractor listSingleDigitsInteractor;
 
     private UserResponse mockUser;
+    private final String BASE_REQUEST_MAPPING = "/single-digit/api/v1/users";
 
     @BeforeEach
     void initEach() {
@@ -66,7 +67,7 @@ class UserControllerCreateUserUseCaseTest {
     @Test
     @Description("Should return 400 if no user is provided")
     void shouldReturn400IfNoUserIsProvided() throws Exception {
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post(BASE_REQUEST_MAPPING)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(null)))
                 .andExpect(status().isBadRequest());
@@ -80,7 +81,7 @@ class UserControllerCreateUserUseCaseTest {
                 .name("Valid Name")
                 .build();
 
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post(BASE_REQUEST_MAPPING)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(userRequest)))
                 .andExpect(status().isBadRequest());
@@ -94,7 +95,7 @@ class UserControllerCreateUserUseCaseTest {
                 .email("valid@mail.com")
                 .build();
 
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post(BASE_REQUEST_MAPPING)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(userRequest)))
                 .andExpect(status().isBadRequest());
@@ -111,7 +112,7 @@ class UserControllerCreateUserUseCaseTest {
 
         Mockito.when(createUserInteractor.execute(Mockito.any())).thenReturn(mockUser);
 
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post(BASE_REQUEST_MAPPING)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(userRequest)))
                 .andDo(MockMvcResultHandlers.print())

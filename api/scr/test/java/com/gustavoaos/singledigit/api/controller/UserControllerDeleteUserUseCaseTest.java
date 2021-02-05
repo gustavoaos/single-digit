@@ -1,11 +1,8 @@
 package com.gustavoaos.singledigit.api.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gustavoaos.singledigit.application.*;
 import com.gustavoaos.singledigit.application.response.UserResponse;
-import com.gustavoaos.singledigit.domain.error.ApiError;
 import com.gustavoaos.singledigit.domain.exception.NotFoundException;
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -16,7 +13,6 @@ import org.springframework.context.annotation.Description;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.Collections;
 import java.util.UUID;
@@ -53,6 +49,7 @@ class UserControllerDeleteUserUseCaseTest {
 
     private String mockUserUUID;
     private UserResponse mockUser;
+    private final String BASE_REQUEST_MAPPING = "/single-digit/api/v1/users";
 
     @BeforeEach
     void initEach() {
@@ -72,7 +69,7 @@ class UserControllerDeleteUserUseCaseTest {
         Mockito.when(findUserInteractor.execute(mockUserUUID)).thenReturn(mockUser);
         Mockito.doNothing().when(deleteUserInteractor).execute(mockUserUUID);
 
-        mockMvc.perform(delete("/users/" + mockUserUUID)
+        mockMvc.perform(delete(BASE_REQUEST_MAPPING + "/" + mockUserUUID)
                 .contentType("application/json"))
                 .andExpect(status().isNoContent());
 
@@ -84,7 +81,7 @@ class UserControllerDeleteUserUseCaseTest {
     void shouldReturn404WhenNoExistUserWithProvidedId() throws Exception {
         Mockito.doThrow(new NotFoundException("resource", mockUserUUID)).when(deleteUserInteractor).execute(mockUserUUID);
 
-        MvcResult result = mockMvc.perform(delete("/users/" + mockUserUUID)
+        MvcResult result = mockMvc.perform(delete(BASE_REQUEST_MAPPING + "/" + mockUserUUID)
                 .contentType("application/json"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isNotFound())

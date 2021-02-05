@@ -57,6 +57,7 @@ class UserControllerUpdateUserUseCaseTest {
     private UserResponse mockUser;
     private UserResponse updatedUser;
     private UpdateUserRequest request;
+    private final String BASE_REQUEST_MAPPING = "/single-digit/api/v1/users";
 
     @BeforeEach
     void initEach() {
@@ -89,7 +90,7 @@ class UserControllerUpdateUserUseCaseTest {
                 mockUser.getId(), request)
         ).thenReturn(updatedUser);
 
-        mockMvc.perform(put("/users/" + mockUserUUID)
+        mockMvc.perform(put(BASE_REQUEST_MAPPING + "/" + mockUserUUID)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(request)))
                 .andDo(MockMvcResultHandlers.print())
@@ -107,7 +108,7 @@ class UserControllerUpdateUserUseCaseTest {
                 mockUserUUID, request)
         ).thenThrow(new NotFoundException("resource", mockUserUUID));
 
-        MvcResult result = mockMvc.perform(put("/users/" + mockUserUUID)
+        MvcResult result = mockMvc.perform(put(BASE_REQUEST_MAPPING + "/" + mockUserUUID)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(request)))
                 .andDo(MockMvcResultHandlers.print())
@@ -120,7 +121,7 @@ class UserControllerUpdateUserUseCaseTest {
     @Test
     @Description("Should return 400 if no name and email are provided")
     void shouldReturn400IfNoNameAndEmailAreProvided() throws Exception {
-        mockMvc.perform(put("/users/" + mockUserUUID)
+        mockMvc.perform(put(BASE_REQUEST_MAPPING + "/" + mockUserUUID)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(null)))
                 .andExpect(status().isBadRequest());

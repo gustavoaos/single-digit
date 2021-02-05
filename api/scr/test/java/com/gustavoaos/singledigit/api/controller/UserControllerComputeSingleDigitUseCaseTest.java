@@ -8,10 +8,8 @@ import com.gustavoaos.singledigit.domain.SingleDigit;
 import com.gustavoaos.singledigit.domain.exception.NotFoundException;
 import com.gustavoaos.singledigit.domain.exception.ArgumentOutOfRangeException;
 import com.gustavoaos.singledigit.domain.strategy.ComputeStrategy;
-import com.gustavoaos.singledigit.domain.strategy.SingleDigitStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -57,14 +55,13 @@ class UserControllerComputeSingleDigitUseCaseTest {
     private ListSingleDigitsInteractor listSingleDigitsInteractor;
 
     private String mockUserUUID;
-    private UserResponse mockUser;
-    private SingleDigit mockSd;
+    private final String BASE_REQUEST_MAPPING = "/single-digit/api/v1/users";
 
     @BeforeEach
     void initEach() {
-        mockSd = new SingleDigit("9875", "4", new ComputeStrategy());
+        SingleDigit mockSd = new SingleDigit("9875", "4", new ComputeStrategy());
         mockUserUUID = UUID.randomUUID().toString();
-        mockUser = UserResponse
+        UserResponse mockUser = UserResponse
                 .builder()
                 .id(mockUserUUID)
                 .name("Joe Doe")
@@ -83,7 +80,7 @@ class UserControllerComputeSingleDigitUseCaseTest {
                 any()
         )).thenReturn(expected);
 
-        MvcResult res = mockMvc.perform(get("/users/compute")
+        MvcResult res = mockMvc.perform(get(BASE_REQUEST_MAPPING + "/compute")
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(request)))
                 .andDo(MockMvcResultHandlers.print())
@@ -100,7 +97,7 @@ class UserControllerComputeSingleDigitUseCaseTest {
     void shouldReturn400WhenNIsNotProvided() throws Exception {
         ComputeSingleDigitRequest request = ComputeSingleDigitRequest.builder().k("4").build();
 
-        mockMvc.perform(get("/users/compute")
+        mockMvc.perform(get(BASE_REQUEST_MAPPING + "/compute")
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(request)))
                 .andDo(MockMvcResultHandlers.print())
@@ -112,7 +109,7 @@ class UserControllerComputeSingleDigitUseCaseTest {
     void shouldReturn400WhenKIsNotProvided() throws Exception {
         ComputeSingleDigitRequest request = ComputeSingleDigitRequest.builder().n("9875").build();
 
-        mockMvc.perform(get("/users/compute")
+        mockMvc.perform(get(BASE_REQUEST_MAPPING + "/compute")
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(request)))
                 .andDo(MockMvcResultHandlers.print())
@@ -128,7 +125,7 @@ class UserControllerComputeSingleDigitUseCaseTest {
                 any()
         )).thenThrow(new ArgumentOutOfRangeException("n", "1", "10^100000"));
 
-        mockMvc.perform(get("/users/compute")
+        mockMvc.perform(get(BASE_REQUEST_MAPPING + "/compute")
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(request)))
                 .andDo(MockMvcResultHandlers.print())
@@ -146,7 +143,7 @@ class UserControllerComputeSingleDigitUseCaseTest {
                 any()
         )).thenThrow(new ArgumentOutOfRangeException("k", "1", "10^5"));
 
-        mockMvc.perform(get("/users/compute")
+        mockMvc.perform(get(BASE_REQUEST_MAPPING + "/compute")
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(request)))
                 .andDo(MockMvcResultHandlers.print())
@@ -165,7 +162,7 @@ class UserControllerComputeSingleDigitUseCaseTest {
                 any(), anyString()
         )).thenThrow(new NotFoundException("user", mockUserUUID));
 
-        MvcResult result = mockMvc.perform(get("/users/compute?id=" + mockUserUUID)
+        MvcResult result = mockMvc.perform(get(BASE_REQUEST_MAPPING + "/compute?id=" + mockUserUUID)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(request)))
                 .andDo(MockMvcResultHandlers.print())
@@ -190,7 +187,7 @@ class UserControllerComputeSingleDigitUseCaseTest {
                 any(), anyString()
         )).thenReturn(expected);
 
-        MvcResult res = mockMvc.perform(get("/users/compute?id=" + mockUserUUID)
+        MvcResult res = mockMvc.perform(get(BASE_REQUEST_MAPPING + "/compute?id=" + mockUserUUID)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(request)))
                 .andDo(MockMvcResultHandlers.print())
