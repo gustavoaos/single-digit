@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.validation.Valid;
 import java.security.*;
-import java.security.spec.InvalidKeySpecException;
 
 @Component
 public class CreateUserInteractorImpl implements CreateUserInteractor {
@@ -31,10 +31,7 @@ public class CreateUserInteractorImpl implements CreateUserInteractor {
     }
 
     @Override
-    public UserResponse execute(CreateUserRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("Missing argument of type CreateUserRequest");
-        }
+    public UserResponse execute(@Valid CreateUserRequest request) {
         try {
             User user = encryptRequest(request);
             User domainUser = userRepository.save(user);
@@ -45,7 +42,7 @@ public class CreateUserInteractorImpl implements CreateUserInteractor {
         }
     }
 
-    private User encryptRequest(CreateUserRequest request)
+    private User encryptRequest(@Valid CreateUserRequest request)
             throws InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException {
         KeyPair keyPair = rsaCrypto.getKeyPair();
         String publicKey = rsaCrypto.encodeKey(keyPair.getPublic());

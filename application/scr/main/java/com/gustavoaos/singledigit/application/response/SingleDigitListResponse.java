@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,11 +18,7 @@ public class SingleDigitListResponse {
     @Builder.Default
     List<SingleDigit> singleDigits = new ArrayList<>();
 
-    public static SingleDigitListResponse from(User user) {
-        if (user == null) {
-            throw new IllegalArgumentException("Invalid user provided.");
-        }
-
+    public static SingleDigitListResponse from(@Valid User user) {
         return SingleDigitListResponse
                 .builder()
                 .singleDigits(user.getSingleDigits())

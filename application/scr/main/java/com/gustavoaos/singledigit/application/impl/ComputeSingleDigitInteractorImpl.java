@@ -11,6 +11,7 @@ import com.gustavoaos.singledigit.domain.strategy.ComputeStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 @Component
@@ -28,21 +29,13 @@ public class ComputeSingleDigitInteractorImpl implements ComputeSingleDigitInter
     }
 
     @Override
-    public Integer execute(ComputeSingleDigitRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("Missing argument of type ComputeSingleDigitRequest");
-        }
-
+    public Integer execute(@Valid ComputeSingleDigitRequest request) {
         SingleDigit sd = this.getFromCache(request);
         return sd.getResult();
     }
 
     @Override
-    public Integer execute(ComputeSingleDigitRequest request, String id) {
-        if (request == null) {
-            throw new IllegalArgumentException("Missing argument of type ComputeSingleDigitRequest");
-        }
-
+    public Integer execute(@Valid ComputeSingleDigitRequest request, String id) {
         User user = userRepository
                 .findById(UUID.fromString(id))
                 .orElseThrow(() -> new NotFoundException("user", id));
@@ -55,13 +48,13 @@ public class ComputeSingleDigitInteractorImpl implements ComputeSingleDigitInter
         return sd.getResult();
     }
 
-    private SingleDigit getFromCache(ComputeSingleDigitRequest key) {
+    private SingleDigit getFromCache(@Valid ComputeSingleDigitRequest key) {
         return this.cacheRepository
                 .getFromCache(key)
                 .orElseGet(() -> createAndPutOnCache(key));
     }
 
-    private SingleDigit createAndPutOnCache(ComputeSingleDigitRequest key) {
+    private SingleDigit createAndPutOnCache(@Valid ComputeSingleDigitRequest key) {
         ComputeStrategy computeStr = new ComputeStrategy();
         SingleDigit sd = new SingleDigit(key.getN(), key.getK(), computeStr);
 

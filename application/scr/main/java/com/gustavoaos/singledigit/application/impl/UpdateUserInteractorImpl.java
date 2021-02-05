@@ -9,6 +9,7 @@ import com.gustavoaos.singledigit.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 @Component
@@ -22,7 +23,7 @@ public class UpdateUserInteractorImpl implements UpdateUserInteractor {
     }
 
     @Override
-    public UserResponse execute(String id, UpdateUserRequest request) {
+    public UserResponse execute(String id, @Valid UpdateUserRequest request) {
         User user = userRepository
                 .findById(UUID.fromString(id))
                 .orElseThrow(() -> new NotFoundException("user", id));

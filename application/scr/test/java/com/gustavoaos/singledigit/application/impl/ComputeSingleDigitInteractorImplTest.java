@@ -54,11 +54,10 @@ class ComputeSingleDigitInteractorImplTest {
     }
 
     @Test
-    @Description("Should throw an IllegalArgumentException when request is null")
-    void shouldThrowAnIllegalArgumentExceptionWhenRequestIsNull() {
+    @Description("Should throw an NullPointerException when request is null")
+    void shouldThrowNullPointerExceptionWhenRequestIsNull() {
         assertThatThrownBy(() -> sut.execute(null))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Missing argument of type ComputeSingleDigitRequest");
+                .isInstanceOf(NullPointerException.class);
     }
 
     @Test

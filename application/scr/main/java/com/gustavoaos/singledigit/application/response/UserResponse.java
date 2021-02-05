@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.Valid;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +24,8 @@ public class UserResponse {
     @Builder.Default
     private List<SingleDigit> singleDigits = new ArrayList<>();
 
-    public static UserResponse from(User user) {
-        if (user == null || user.getUuid() == null || user.getName().isEmpty() || user.getEmail().isEmpty()) {
+    public static UserResponse from(@Valid User user) {
+        if (user.getUuid() == null) {
             throw new InvalidParameterException("Invalid user provided");
         }
 

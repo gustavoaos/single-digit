@@ -32,9 +32,9 @@ class UserResponseTest {
     }
 
     @Test
-    @Description("Should throw an InvalidParameterException when user provided is null")
-    void shouldThrowAnInvalidParametersExceptionWhenUserProvidedIsNull() {
-        assertThatThrownBy(() -> UserResponse.from(null))
+    @Description("Should throw an InvalidParameterException when user provided has null id")
+    void shouldThrowAnInvalidParametersExceptionWhenUserProvidedHasNullId() {
+        assertThatThrownBy(() -> UserResponse.from(User.builder().build()))
                 .isInstanceOf(InvalidParameterException.class)
                 .hasMessage("Invalid user provided");
     }

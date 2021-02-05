@@ -1,13 +1,14 @@
 package com.gustavoaos.singledigit.domain;
 
 import com.gustavoaos.singledigit.domain.exception.ArgumentOutOfRangeException;
-import com.gustavoaos.singledigit.domain.strategy.ComputeStrategy;
 import com.gustavoaos.singledigit.domain.strategy.SingleDigitStrategy;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Transient;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.math.BigInteger;
 
 @Embeddable
@@ -18,9 +19,16 @@ public class SingleDigit {
     private static final BigInteger MAXIMUM_VALUE_N = BigInteger.valueOf(10).pow(10^1_000_000);
     private static final BigInteger MAXIMUM_VALUE_K = BigInteger.valueOf(10).pow(5);
 
-    @Getter private String n;
-    @Getter private String k;
-    @Getter private int result;
+    @Getter
+    @NotBlank(message = "N is mandatory")
+    private String n;
+
+    @Getter
+    @NotBlank(message = "K is mandatory")
+    private String k;
+
+    @Getter
+    private int result;
 
     @Transient
     private SingleDigitStrategy strategy;

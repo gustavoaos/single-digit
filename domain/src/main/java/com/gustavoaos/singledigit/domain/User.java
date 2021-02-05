@@ -8,6 +8,8 @@ import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -25,9 +27,12 @@ public class User {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID uuid;
 
+    @NotBlank(message = "Name is mandatory")
     @Column(name = "name", columnDefinition = "LONGTEXT")
     private String name;
 
+    @NotBlank(message = "Email is mandatory")
+    @Email(message = "Invalid email provided")
     @Column(name = "email", columnDefinition = "LONGTEXT")
     private String email;
 
