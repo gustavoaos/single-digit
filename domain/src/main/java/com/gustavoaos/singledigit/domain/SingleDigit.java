@@ -33,15 +33,6 @@ public class SingleDigit {
         return value.compareTo(upperBound) > 0;
     }
 
-//    public SingleDigit(String n, String k) {
-//        validateConstrains(n, k);
-//
-//        this.n = n;
-//        this.k = k;
-//        this.strategy = new ComputeStrategy();
-//        this.result = this.strategy.compute(n, k);
-//    }
-
     public SingleDigit(String n, String k, SingleDigitStrategy strategy) {
         validateConstrains(n, k);
 
