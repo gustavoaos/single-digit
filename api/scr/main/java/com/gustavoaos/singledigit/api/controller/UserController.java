@@ -55,17 +55,13 @@ public class UserController {
     public @ResponseBody ResponseEntity<UserResponse> find(
             @RequestHeader(value = "public-key", required = false) String publicKey,
             @PathVariable("id") String id) {
-        try {
-            UserResponse user;
-            if (publicKey == null) {
-                user = this.findUserInteractor.execute(id);
-            } else {
-                user = this.findUserInteractor.execute(id, publicKey);
-            }
-            return ResponseEntity.status(HttpStatus.OK).body(user);
-        } catch (WrongKeyException err) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, err.getMessage());
+        UserResponse user;
+        if (publicKey == null) {
+            user = this.findUserInteractor.execute(id);
+        } else {
+            user = this.findUserInteractor.execute(id, publicKey);
         }
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
     @DeleteMapping("/{id}")

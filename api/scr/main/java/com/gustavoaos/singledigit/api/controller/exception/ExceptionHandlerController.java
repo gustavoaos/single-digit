@@ -3,6 +3,7 @@ package com.gustavoaos.singledigit.api.controller.exception;
 import com.gustavoaos.singledigit.domain.error.ApiError;
 import com.gustavoaos.singledigit.domain.exception.ArgumentOutOfRangeException;
 import com.gustavoaos.singledigit.domain.exception.NotFoundException;
+import com.gustavoaos.singledigit.domain.exception.WrongKeyException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -47,23 +47,19 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiError);
     }
 
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(ConstraintViolationException.class)
-//    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex) {
-//        List<String> errors = new ArrayList<>();
-//        ex.getConstraintViolations().forEach(constraintViolation ->
-//                errors.add(constraintViolation.getRootBeanClass().getName() +
-//                constraintViolation.getPropertyPath() + ": " +
-//                constraintViolation.getMessage()));
-//        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
-//
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
-//    }
-
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ArgumentOutOfRangeException.class)
     public ResponseEntity<Object> handleArgumentOutOfRangeException(ArgumentOutOfRangeException ex) {
         List<String> errors = Collections.singletonList(ex.getMessage());
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(WrongKeyException.class)
+    public ResponseEntity<Object> handleWrongKeyException(WrongKeyException ex) {
+        List<String> errors = Collections.singletonList(ex.getMessage() + ": " + ex.getId());
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
