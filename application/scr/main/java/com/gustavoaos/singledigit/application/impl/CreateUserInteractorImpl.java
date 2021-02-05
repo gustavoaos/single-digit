@@ -39,7 +39,7 @@ public class CreateUserInteractorImpl implements CreateUserInteractor {
             User user = encryptRequest(request);
             User domainUser = userRepository.save(user);
 
-            return UserResponse.from(domainUser); // decryptResponse(domainUser);
+            return UserResponse.from(domainUser);
         } catch (NoSuchAlgorithmException | InvalidKeyException | BadPaddingException | NoSuchPaddingException | IllegalBlockSizeException err) {
             throw new CryptoException("user");
         }
@@ -61,21 +61,5 @@ public class CreateUserInteractorImpl implements CreateUserInteractor {
             throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
         return rsaCrypto.encryptWithPublicKey(text, publicKey);
     }
-
-    private UserResponse decryptResponse(User user)
-            throws InvalidKeySpecException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, NoSuchPaddingException, IllegalBlockSizeException {
-        UserResponse userResponse = UserResponse.from(user);
-
-        userResponse.setName(decrypt(user.getName(), rsaCrypto.decodePrivateKey(user.getPrivateKey())));
-        userResponse.setEmail(decrypt(user.getEmail(), rsaCrypto.decodePrivateKey(user.getPrivateKey())));
-
-        return userResponse;
-    }
-
-    private String decrypt(String text, PrivateKey privateKey)
-            throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
-        return rsaCrypto.decryptWithPrivateKey(text, privateKey);
-    }
-
 
 }

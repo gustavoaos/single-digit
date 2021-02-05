@@ -13,11 +13,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Description;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.Collections;
 import java.util.UUID;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -105,12 +107,14 @@ class UserControllerUpdateUserUseCaseTest {
                 mockUserUUID, request)
         ).thenThrow(new NotFoundException("resource", mockUserUUID));
 
-        mockMvc.perform(put("/users/" + mockUserUUID)
+        MvcResult result = mockMvc.perform(put("/users/" + mockUserUUID)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(request)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isNotFound())
-                .andExpect(status().reason("Resource not found"));
+                .andReturn();
+
+        assertThat(result.getResponse().getContentAsString()).contains("Resource not found", mockUserUUID);
     }
 
     @Test

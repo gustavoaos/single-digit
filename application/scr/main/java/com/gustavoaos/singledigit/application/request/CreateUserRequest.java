@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.util.UUID;
 
 @Data
@@ -12,7 +13,10 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CreateUserRequest {
 
+    @NotBlank(message = "Name is mandatory")
     private String name;
+
+    @NotBlank(message = "Email is mandatory")
     private String email;
 
     public User toDomain() {

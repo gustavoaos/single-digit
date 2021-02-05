@@ -14,11 +14,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Description;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.Arrays;
 import java.util.UUID;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -72,11 +74,13 @@ class UserControllerListSingleDigitsUseCaseTest {
                 mockUserUUID)
         ).thenThrow(new NotFoundException("resource", mockUserUUID));
 
-        mockMvc.perform(get("/users/" + mockUserUUID + "/list")
+        MvcResult result = mockMvc.perform(get("/users/" + mockUserUUID + "/list")
                 .contentType("application/json"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isNotFound())
-                .andExpect(status().reason("Resource not found"));
+                .andReturn();
+
+        assertThat(result.getResponse().getContentAsString()).contains("Resource not found", mockUserUUID);
     }
 
     @Test

@@ -3,7 +3,9 @@ package com.gustavoaos.singledigit.api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gustavoaos.singledigit.application.*;
 import com.gustavoaos.singledigit.application.response.UserResponse;
+import com.gustavoaos.singledigit.domain.error.ApiError;
 import com.gustavoaos.singledigit.domain.exception.NotFoundException;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -12,11 +14,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Description;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.Collections;
 import java.util.UUID;
 
+import static org.assertj.core.api.AssertionsForClassTypes.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -79,13 +84,14 @@ class UserControllerDeleteUserUseCaseTest {
     void shouldReturn404WhenNoExistUserWithProvidedId() throws Exception {
         Mockito.doThrow(new NotFoundException("resource", mockUserUUID)).when(deleteUserInteractor).execute(mockUserUUID);
 
-        mockMvc.perform(delete("/users/" + mockUserUUID)
+        MvcResult result = mockMvc.perform(delete("/users/" + mockUserUUID)
                 .contentType("application/json"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isNotFound())
-                .andExpect(status().reason("Resource not found"));
+                .andReturn();
 
         verify(deleteUserInteractor, times(1)).execute(mockUserUUID);
+        assertThat(result.getResponse().getContentAsString()).contains("Resource not found", mockUserUUID);
     }
 
 }
