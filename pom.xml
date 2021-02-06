@@ -144,11 +144,25 @@
 							<resources>
 								<resource>
 									<directory>web/src/main/resources</directory>
-									<targetPath>resources</targetPath>
 								</resource>
 							</resources>
 						</configuration>
 					</execution>
+<!--					<execution>-->
+<!--						<id>add-resource</id>-->
+<!--						<phase>generate-resources</phase>-->
+<!--						<goals>-->
+<!--							<goal>add-resource</goal>-->
+<!--						</goals>-->
+<!--						<configuration>-->
+<!--							<resources>-->
+<!--								<resource>-->
+<!--									<directory>web/src/main/resources</directory>-->
+<!--									<targetPath>resources</targetPath>-->
+<!--								</resource>-->
+<!--							</resources>-->
+<!--						</configuration>-->
+<!--					</execution>-->
 					<execution>
 						<id>generate-test-sources</id>
 						<phase>generate-test-sources</phase>
