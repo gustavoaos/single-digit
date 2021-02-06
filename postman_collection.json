@@ -1,0 +1,429 @@
+{
+	"info": {
+		"_postman_id": "5739cd88-48b8-4f15-aac4-32ad910d856b",
+		"name": "InterBank - Single Digit",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "single-digit/api/v1/users",
+			"item": [
+				{
+					"name": "Create User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"try {\r",
+									"    let response = JSON.parse(responseBody)\r",
+									"    pm.environment.set(\"last_created_user_id\", response.id)\r",
+									"    pm.environment.set(\"last_created_user_public_key\", response.publicKey)\r",
+									"} catch (err) {\r",
+									"    console.log(err)\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(201)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Wanda Maximoff\",\r\n    \"email\": \"wanda@mutant.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/single-digit/api/v1/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"single-digit",
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find User by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"try {\r",
+									"    let response = JSON.parse(responseBody)\r",
+									"    pm.environment.set(\"last_found_user_id\", response.id)\r",
+									"    pm.environment.set(\"last_found_user_public_key\", response.publicKey)\r",
+									"} catch (err) {\r",
+									"    console.log(err)\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/single-digit/api/v1/users/{{last_created_user_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"single-digit",
+								"api",
+								"v1",
+								"users",
+								"{{last_created_user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find User by ID with public key",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"try {\r",
+									"    let response = JSON.parse(responseBody)\r",
+									"    pm.environment.set(\"last_found_user_id\", response.id)\r",
+									"    pm.environment.set(\"last_found_user_public_key\", response.publicKey)\r",
+									"} catch (err) {\r",
+									"    console.log(err)\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "public-key",
+								"value": "{{last_created_user_public_key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/single-digit/api/v1/users/{{last_created_user_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"single-digit",
+								"api",
+								"v1",
+								"users",
+								"{{last_created_user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Compute single digit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"n\": \"9875\",\r\n    \"k\": \"4\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/single-digit/api/v1/users/compute",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"single-digit",
+								"api",
+								"v1",
+								"users",
+								"compute"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Compute single digit with User ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"n\": \"9875\",\r\n    \"k\": \"4\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/single-digit/api/v1/users/compute?id={{last_created_user_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"single-digit",
+								"api",
+								"v1",
+								"users",
+								"compute"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{last_created_user_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List single digit by User ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"n\": \"9875\",\r\n    \"k\": \"4\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/single-digit/api/v1/users/{{last_created_user_id}}/list",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"single-digit",
+								"api",
+								"v1",
+								"users",
+								"{{last_created_user_id}}",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Wanda Maximoff\",\r\n    \"email\": \"w.maximoff@mutant.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/single-digit/api/v1/users/{{last_created_user_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"single-digit",
+								"api",
+								"v1",
+								"users",
+								"{{last_created_user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(204)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/single-digit/api/v1/users/{{last_created_user_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"single-digit",
+								"api",
+								"v1",
+								"users",
+								"{{last_created_user_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
