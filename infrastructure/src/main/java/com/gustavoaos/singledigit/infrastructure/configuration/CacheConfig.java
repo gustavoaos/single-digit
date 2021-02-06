@@ -8,9 +8,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CacheConfig {
 
+    private static final int CACHE_ENTRIES = 10;
     @Bean
-    public <K, V> LRUCache<K, V> getCache(@Value("${app.cache-capacity}") Long cacheCapacity) {
-        return new LRUCache<>(10);
+    public <K, V> LRUCache<K, V> getCache() {
+        return new LRUCache<>(CACHE_ENTRIES);
     }
 
 }
