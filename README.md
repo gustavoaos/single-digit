@@ -39,7 +39,10 @@ mvn spring-boot:run
 ```
 or
 ```shell
-java -jar target/social-media-list-0.0.1-SNAPSHOT.jar
+java -jar target/single-digit-1.0.0-SNAPSHOT.jar
 ```
 
-View the [Swagger documentation](http://localhost:8080/swagger-ui/single-digit.html)
+## Documentation
+ You can view the Swagger documentation [here](http://localhost:8080/swagger-ui/single-digit.html).
+
+
